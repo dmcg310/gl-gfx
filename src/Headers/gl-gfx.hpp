@@ -12,7 +12,4 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
 
-const int mWidth = 1280;
-const int mHeight = 800;
-
 #endif
