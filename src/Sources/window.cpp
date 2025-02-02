@@ -1,11 +1,10 @@
 #include "window.hpp"
-
-#include <iostream>
+#include "error_handler.hpp"
 
 Window::Window(int w, int h, const char *t) : width(w), height(h) {
   if (!glfwInit()) {
-    std::cerr << "Failed to initialize GLFW" << std::endl;
-    return;
+    ErrorHandler::throwError("Failed to initialize GLFW", __FILE__, __func__,
+                             __LINE__);
   }
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -15,9 +14,8 @@ Window::Window(int w, int h, const char *t) : width(w), height(h) {
 
   handle = glfwCreateWindow(w, h, t, nullptr, nullptr);
   if (handle == nullptr) {
-    std::cerr << "Failed to create GLFW window" << std::endl;
-    glfwTerminate();
-    return;
+    ErrorHandler::throwError("Failed to create GLFW window", __FILE__, __func__,
+                             __LINE__);
   }
 
   glfwMakeContextCurrent(handle);

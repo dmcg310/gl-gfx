@@ -1,4 +1,4 @@
-#include "gl-gfx.hpp"
+#include "gl_gfx.hpp"
 #include "window.hpp"
 
 int main(int argc, char *argv[]) {
