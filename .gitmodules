@@ -1,0 +1,24 @@
+[submodule "src/Vendor/assimp"]
+	path = src/Vendor/assimp
+	url = https://github.com/assimp/assimp.git
+	branch = master
+[submodule "src/Vendor/glad"]
+	path = src/Vendor/glad
+	url = https://github.com/Dav1dde/glad.git
+	branch = c
+[submodule "src/Vendor/glfw"]
+	path = src/Vendor/glfw
+	url = https://github.com/glfw/glfw.git
+	branch = master
+[submodule "src/Vendor/glm"]
+	path = src/Vendor/glm
+	url = https://github.com/g-truc/glm.git
+	branch = master
+[submodule "src/Vendor/stb"]
+	path = src/Vendor/stb
+	url = https://github.com/nothings/stb.git
+	branch = master
+[submodule "src/Vendor/bullet"]
+	path = src/Vendor/bullet
+	url = https://github.com/bulletphysics/bullet3.git
+	branch = master
