@@ -31,10 +31,16 @@ Window::~Window() {
 
 bool Window::should_close() const { return glfwWindowShouldClose(m_handle); }
 
-void Window::set_should_close(int value) {
+void Window::set_should_close(bool value) {
   glfwSetWindowShouldClose(m_handle, value);
 }
 
 void Window::swap_buffers() { glfwSwapBuffers(m_handle); }
 
 void Window::poll_events() { glfwPollEvents(); }
+
+void Window::handle_input() {
+  if (glfwGetKey(m_handle, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    set_should_close(true);
+  }
+}

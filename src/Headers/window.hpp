@@ -20,10 +20,12 @@ public:
 
   bool should_close() const;
 
-  void set_should_close(int value);
+  void set_should_close(bool value);
 
   void swap_buffers();
   void poll_events();
+
+  void handle_input();
 };
 
 #endif // WINDOW_HPP

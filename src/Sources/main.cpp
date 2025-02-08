@@ -21,6 +21,7 @@ int main(void) {
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    window.handle_input();
     window.swap_buffers();
     window.poll_events();
   }
