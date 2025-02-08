@@ -6,17 +6,17 @@
 
 class Window {
 private:
-  GLFWwindow *handle;
-  int width;
-  int height;
+  GLFWwindow *m_handle;
+  int m_width;
+  int m_height;
 
 public:
   Window(int w, int h, const char *t);
   ~Window();
 
-  GLFWwindow *get() const { return handle; }
-  int get_width() const { return width; }
-  int get_height() const { return height; }
+  GLFWwindow *get() const { return m_handle; }
+  int get_width() const { return m_width; }
+  int get_height() const { return m_height; }
 
   bool should_close() const;
 

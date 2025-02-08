@@ -1,7 +1,7 @@
 #include "window.hpp"
 #include "error_handler.hpp"
 
-Window::Window(int w, int h, const char *t) : width(w), height(h) {
+Window::Window(int w, int h, const char *t) : m_width(w), m_height(h) {
   if (!glfwInit()) {
     ErrorHandler::throwError("Failed to initialize GLFW", __FILE__, __func__,
                              __LINE__);
@@ -12,29 +12,29 @@ Window::Window(int w, int h, const char *t) : width(w), height(h) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-  handle = glfwCreateWindow(w, h, t, nullptr, nullptr);
-  if (handle == nullptr) {
+  m_handle = glfwCreateWindow(w, h, t, nullptr, nullptr);
+  if (m_handle == nullptr) {
     ErrorHandler::throwError("Failed to create GLFW window", __FILE__, __func__,
                              __LINE__);
   }
 
-  glfwMakeContextCurrent(handle);
+  glfwMakeContextCurrent(m_handle);
 }
 
 Window::~Window() {
-  if (handle) {
-    glfwDestroyWindow(handle);
+  if (m_handle) {
+    glfwDestroyWindow(m_handle);
   }
 
   glfwTerminate();
 }
 
-bool Window::should_close() const { return glfwWindowShouldClose(handle); }
+bool Window::should_close() const { return glfwWindowShouldClose(m_handle); }
 
 void Window::set_should_close(int value) {
-  glfwSetWindowShouldClose(handle, value);
+  glfwSetWindowShouldClose(m_handle, value);
 }
 
-void Window::swap_buffers() { glfwSwapBuffers(handle); }
+void Window::swap_buffers() { glfwSwapBuffers(m_handle); }
 
 void Window::poll_events() { glfwPollEvents(); }
