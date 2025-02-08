@@ -5,11 +5,6 @@
 #include <glad/glad.h>
 
 class Window {
-private:
-  GLFWwindow *m_handle;
-  int m_width;
-  int m_height;
-
 public:
   Window(int w, int h, const char *t);
   ~Window();
@@ -26,6 +21,11 @@ public:
   void poll_events();
 
   void handle_input();
+
+private:
+  GLFWwindow *m_handle;
+  int m_width;
+  int m_height;
 };
 
 #endif // WINDOW_HPP
