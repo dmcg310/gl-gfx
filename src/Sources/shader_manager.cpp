@@ -1,104 +1,116 @@
-#include "shader_manager.hpp"
-#include "error_handler.hpp"
+#include "shader_manager.h"
 
 #include <fstream>
-#include <iostream>
-#include <ostream>
+#include <filesystem>
+#include <unordered_map>
 
-GLuint ShaderManager::create_program(const std::string &vPath,
-                                     const std::string &fPath) {
-  GLuint vertexShader = load_shader(VERTEX, vPath);
-  GLuint fragmentShader = load_shader(FRAGMENT, fPath);
+namespace ShaderManager {
+    std::unordered_map<ShaderType, unsigned int> m_shaders;
+    std::unordered_map<std::string, unsigned int> m_programs;
 
-  if (!vertexShader || !fragmentShader) {
-    return 0;
-  }
+    GLuint CreateProgram(const std::string &vPath, const std::string &fPath) {
+        std::filesystem::path vertexFile = std::filesystem::path(vPath).filename();
+        std::filesystem::path fragmentFile = std::filesystem::path(fPath).filename();
 
-  GLuint program = glCreateProgram();
-  glAttachShader(program, vertexShader);
-  glAttachShader(program, fragmentShader);
-  glLinkProgram(program);
-  check_compile_errors(program, "PROGRAM");
+        GLuint vertexShader = LoadShader(VERTEX, GetShaderPath(vertexFile.string()));
+        GLuint fragmentShader = LoadShader(FRAGMENT, GetShaderPath(fragmentFile.string()));
 
-  glDetachShader(program, vertexShader);
-  glDetachShader(program, fragmentShader);
+        if (!vertexShader || !fragmentShader) {
+            return 0;
+        }
 
-  std::string key = vPath + "_" + fPath;
-  m_programs[key] = program;
+        GLuint program = glCreateProgram();
+        glAttachShader(program, vertexShader);
+        glAttachShader(program, fragmentShader);
+        glLinkProgram(program);
 
-  return program;
-}
+        int success;
+        char infoLog[1024];
+        glGetProgramiv(program, GL_LINK_STATUS, &success);
+        if (!success) {
+            glGetProgramInfoLog(program, 1024, NULL, infoLog);
+            ErrorHandler::ThrowError(std::string("Program linking error: ") + infoLog,
+                                     __FILE__, __func__, __LINE__);
+        }
 
-GLuint ShaderManager::get_shader(ShaderType type) {
-  auto it = m_shaders.find(type);
+        glDetachShader(program, vertexShader);
+        glDetachShader(program, fragmentShader);
 
-  if (it != m_shaders.end()) {
-    return it->second;
-  } else {
-    const std::string msg = "Requested shader of type " +
-                            shader_type_to_string(type) +
-                            " has not been loaded.";
+        std::string key = vPath + "_" + fPath;
+        m_programs[key] = program;
 
-    ErrorHandler::warn(msg, __FILE__, __func__, __LINE__);
-    return 0;
-  }
-}
-
-GLuint ShaderManager::load_shader(ShaderType type, const std::string &path) {
-  std::string code;
-  std::ifstream file;
-
-  file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-  try {
-    file.open(path);
-
-    std::stringstream shaderStream;
-    shaderStream << file.rdbuf();
-
-    file.close();
-
-    code = shaderStream.str();
-  } catch (std::ifstream::failure e) {
-    ErrorHandler::warn("Shader file not successfully read", __FILE__, __func__,
-                       __LINE__);
-    return 0;
-  }
-
-  const char *shaderCode = code.c_str();
-  GLuint shaderId = glCreateShader(shader_type_to_gl(type));
-  glShaderSource(shaderId, 1, &shaderCode, NULL);
-  glCompileShader(shaderId);
-  check_compile_errors(shaderId, shader_type_to_string(type));
-
-  m_shaders[type] = shaderId;
-
-  return shaderId;
-}
-
-void ShaderManager::check_compile_errors(unsigned int shader,
-                                         const std::string &type) {
-  int success;
-  char infoLog[1024];
-
-  if (type == "PROGRAM") {
-    glGetProgramiv(shader, GL_LINK_STATUS, &success);
-    if (!success) {
-      glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-      std::cout << "ERROR::PROGRAM_LINKING_ERROR: " << infoLog << std::endl;
-
-      ErrorHandler::throwError("Program linking error", __FILE__, __func__,
-                               __LINE__);
+        return program;
     }
-  } else {
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-      glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-      std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
-                << infoLog << std::endl;
 
-      ErrorHandler::throwError("Shader compilation error", __FILE__, __func__,
-                               __LINE__);
+    GLuint LoadShader(ShaderType type, const std::string &path) {
+        std::string code;
+        std::ifstream file;
+
+        try {
+            file.open(path);
+            if (!file.is_open()) {
+                ErrorHandler::Warn("Could not open shader file: " + path, __FILE__,
+                                   __func__, __LINE__);
+                return 0;
+            }
+
+            std::stringstream shaderStream;
+            shaderStream << file.rdbuf();
+            file.close();
+            code = shaderStream.str();
+        } catch (std::ifstream::failure &e) {
+            ErrorHandler::Warn("Shader file not successfully read: " + path, __FILE__,
+                               __func__, __LINE__);
+            return 0;
+        }
+
+        const char *shaderCode = code.c_str();
+        GLuint shaderId = glCreateShader(ShaderTypeToGL(type));
+        glShaderSource(shaderId, 1, &shaderCode, NULL);
+        glCompileShader(shaderId);
+
+        int success;
+        char infoLog[1024];
+        glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shaderId, 1024, NULL, infoLog);
+            ErrorHandler::ThrowError(std::string("Shader compilation error of type ") +
+                                     ShaderTypeToString(type) + ": " + infoLog,
+                                     __FILE__, __func__, __LINE__);
+        }
+
+        m_shaders[type] = shaderId;
+        return shaderId;
     }
-  }
+
+    std::string GetShaderPath(const std::string &filename) {
+        std::filesystem::path paths[] = {
+            "src/Shaders",
+            "../src/Shaders",
+            "../../src/Shaders",
+            "gl-gfx/src/Shaders"
+        };
+
+        for (const auto &basePath: paths) {
+            std::filesystem::path fullPath = basePath / filename;
+            if (exists(fullPath)) {
+                return fullPath.string();
+            }
+        }
+
+        return filename;
+    }
+
+    void CleanUp() {
+        for (const auto &[_, shader]: m_shaders) {
+            glDeleteShader(shader);
+        }
+
+        for (const auto &[_, program]: m_programs) {
+            glDeleteProgram(program);
+        }
+
+        m_shaders.clear();
+        m_programs.clear();
+    }
 }

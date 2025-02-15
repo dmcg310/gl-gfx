@@ -1,5 +1,4 @@
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#pragma once
 
 // struct Vertex {
 //   float x, y, z; // Position
@@ -11,10 +10,10 @@
 // };
 
 struct Vertex {
-  float x, y, z; // Position
+  float x, y, z;
 
   Vertex() = default;
-  Vertex(float x, float y, float z) : x(x), y(y), z(z) {}
-};
 
-#endif // TYPES_HPP
+  Vertex(float x, float y, float z) : x(x), y(y), z(z) {
+  }
+};
