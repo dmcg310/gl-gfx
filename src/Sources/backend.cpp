@@ -56,8 +56,7 @@ namespace Backend {
 
 		CreateGLFWWindow(WindowedMode::WINDOWED);
 		if (m_window == NULL) {
-			ErrorHandler::ThrowError("Failed to create GLFW window", __FILE__, __func__,
-			                         __LINE__);
+			ErrorHandler::ThrowError("Failed to create GLFW window", __FILE__, __func__, __LINE__);
 		}
 
 		glfwSetFramebufferSizeCallback(m_window, framebuffer_resize_callback);
@@ -66,8 +65,7 @@ namespace Backend {
 		glfwMakeContextCurrent(m_window);
 
 		if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-			ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__,
-			                         __LINE__);
+			ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__, __LINE__);
 		}
 
 		Input::Init();

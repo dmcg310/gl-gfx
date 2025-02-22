@@ -44,8 +44,7 @@ namespace TextureSystem {
             0
         );
         if (!data) {
-            ErrorHandler::Warn("Failed to load texture: " + path, __FILE__,
-                               __func__, __LINE__);
+            ErrorHandler::Warn("Failed to load texture: " + path, __FILE__, __func__, __LINE__);
             return nullptr;
         }
 
@@ -58,8 +57,8 @@ namespace TextureSystem {
                 break;
             default:
                 ErrorHandler::Warn(
-                    "Unsupported number of channels: " + std::to_string(texture.channels), __FILE__,
-                    __func__, __LINE__);
+                    "Unsupported number of channels: " + std::to_string(texture.channels), __FILE__, __func__,
+                    __LINE__);
                 stbi_image_free(data);
                 return nullptr;
         }

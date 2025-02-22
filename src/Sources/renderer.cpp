@@ -30,23 +30,20 @@ namespace Renderer {
             "../src/Shaders/default.frag"
         );
         if (!m_defaultShader) {
-            ErrorHandler::ThrowError("Failed to create default shader", __FILE__,
-                                     __func__, __LINE__);
+            ErrorHandler::ThrowError("Failed to create default shader", __FILE__, __func__, __LINE__);
         }
 
         m_defaultMaterial = MaterialSystem::CreateMaterial("default", "default");
         if (!m_defaultMaterial) {
-            ErrorHandler::ThrowError("Failed to create default material", __FILE__,
-                                     __func__, __LINE__);
+            ErrorHandler::ThrowError("Failed to create default material", __FILE__, __func__, __LINE__);
         }
 
         m_texture = TextureSystem::CreateTexture("default", "../assets/textures/default.png");
         if (!m_texture) {
-            ErrorHandler::ThrowError("Failed to load texture", __FILE__,
-                                     __func__, __LINE__);
+            ErrorHandler::ThrowError("Failed to load texture", __FILE__, __func__, __LINE__);
         }
 
-        std::vector<Vertex> vertices = {
+        const std::vector<Vertex> vertices = {
             // Bottom left
             {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
             // Bottom right
@@ -57,21 +54,19 @@ namespace Renderer {
             {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}
         };
 
-        std::vector<uint32_t> indices = {
+        const std::vector<uint32_t> indices = {
             0, 1, 2,
             0, 2, 3
         };
 
         m_quadMesh = MeshSystem::CreateMesh("quad", vertices, indices);
         if (!m_quadMesh) {
-            ErrorHandler::ThrowError("Failed to create mesh", __FILE__,
-                                     __func__, __LINE__);
+            ErrorHandler::ThrowError("Failed to create mesh", __FILE__, __func__, __LINE__);
         }
 
         m_quadTransform = TransformSystem::CreateTransform("quad");
         if (!m_quadTransform) {
-            ErrorHandler::ThrowError("Failed to create quad transform", __FILE__,
-                                     __func__, __LINE__);
+            ErrorHandler::ThrowError("Failed to create quad transform", __FILE__, __func__, __LINE__);
         }
 
         MaterialSystem::SetVec3(m_defaultMaterial, "color", glm::vec3(1.0f));
@@ -89,8 +84,7 @@ namespace Renderer {
         m_rotationAngle += 0.01f;
         TransformSystem::SetRotation(m_quadTransform, glm::vec3(0.0f, 0.0f, m_rotationAngle));
 
-        MaterialSystem::SetMat4(m_defaultMaterial, "model",
-                                TransformSystem::GetModelMatrix(m_quadTransform));
+        MaterialSystem::SetMat4(m_defaultMaterial, "model", TransformSystem::GetModelMatrix(m_quadTransform));
 
         TextureSystem::Bind(m_texture, 0);
 

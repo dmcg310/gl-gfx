@@ -8,8 +8,7 @@ namespace ErrorHandler {
     inline std::string FormatError(const std::string &message, const std::string &file, const std::string &function,
                                    int line) {
         std::ostringstream oss;
-        oss << "[ERROR](" << function << "()," << file << "#" << line
-                << "): " << message << std::endl;
+        oss << "[ERROR](" << function << "()," << file << "#" << line << "): " << message << std::endl;
 
         return oss.str();
     }
@@ -17,8 +16,7 @@ namespace ErrorHandler {
     inline std::string FormatWarning(const std::string &message, const std::string &file, const std::string &function,
                                      int line) {
         std::ostringstream oss;
-        oss << "[WARN](" << function << "()," << file << "#" << line
-                << "): " << message << std::endl;
+        oss << "[WARN](" << function << "()," << file << "#" << line << "): " << message << std::endl;
 
         return oss.str();
     }

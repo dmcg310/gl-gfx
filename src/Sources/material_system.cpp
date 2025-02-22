@@ -60,9 +60,7 @@ namespace MaterialSystem {
 
     void Bind(const Material *material) {
         if (!material || !material->shader) {
-            ErrorHandler::Warn("Attempting to bind invalid material", __FILE__,
-                               __func__, __LINE__
-            );
+            ErrorHandler::Warn("Attempting to bind invalid material", __FILE__, __func__, __LINE__);
             return;
         }
 
@@ -91,8 +89,7 @@ namespace MaterialSystem {
                         break;
                 }
             } catch (const std::bad_any_cast &e) {
-                ErrorHandler::Warn("Failed to set material property: " + name, __FILE__,
-                                   __func__, __LINE__
+                ErrorHandler::Warn("Failed to set material property: " + name, __FILE__, __func__, __LINE__
                 );
             }
         }

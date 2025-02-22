@@ -51,8 +51,7 @@ namespace ShaderSystem {
 
         const GLint location = glGetUniformLocation(shader->programId, name.c_str());
         if (location == -1) {
-            ErrorHandler::Warn("Uniform '" + name + "' not found in shader program", __FILE__,
-                               __func__, __LINE__);
+            ErrorHandler::Warn("Uniform '" + name + "' not found in shader program", __FILE__, __func__, __LINE__);
         }
 
         m_uniformLocations[key] = location;
