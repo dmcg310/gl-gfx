@@ -1,10 +1,12 @@
 #include "renderer.h"
 
+#include "backend.h"
 #include "shader_system.h"
 #include "material_system.h"
 #include "mesh_system.h"
 #include "texture_system.h"
 #include "transform_system.h"
+#include "camera_system.h"
 
 #include <vector>
 
@@ -14,8 +16,9 @@ namespace Renderer {
     MeshSystem::Mesh *m_cubeMesh = nullptr;
     TextureSystem::Texture *m_texture = nullptr;
     TransformSystem::Transform *m_cubeTransform = nullptr;
+    CameraSystem::Camera *m_camera = nullptr;
 
-    glm::vec3 m_rotation{0.0f};
+    float m_lastFrameTime = 0.0f;
 
     void Init() {
         ShaderSystem::Init();
@@ -23,6 +26,7 @@ namespace Renderer {
         MeshSystem::Init();
         TextureSystem::Init();
         TransformSystem::Init();
+        CameraSystem::Init();
 
         m_defaultShader = ShaderSystem::CreateShader(
             "default",
@@ -106,40 +110,51 @@ namespace Renderer {
             ErrorHandler::ThrowError("Failed to create quad transform", __FILE__, __func__, __LINE__);
         }
 
+        m_camera = CameraSystem::CreateCamera("main");
+        if (!m_camera) {
+            ErrorHandler::ThrowError("Failed to create camera", __FILE__, __func__, __LINE__);
+        }
+
         TransformSystem::SetPosition(m_cubeTransform, glm::vec3(0.0f, 0.0f, -2.0f));
+
+        const float aspectRatio = Backend::GetWindowWidth() / Backend::GetWindowHeight();
+        CameraSystem::SetProjection(m_camera, 45.0f, aspectRatio, 0.1f, 100.0f);
 
         MaterialSystem::SetVec3(m_defaultMaterial, "color", glm::vec3(1.0f));
         MaterialSystem::SetInt(m_defaultMaterial, "mainTexture", 0);
         MaterialSystem::SetInt(m_defaultMaterial, "useTexture", 1);
-
-        constexpr float aspectRatio = 800.0f / 600.0f;
-        const glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-        MaterialSystem::SetMat4(m_defaultMaterial, "projection", projection);
     }
 
     void Render() {
+        const float currentFrame = Backend::GetWindowTime();
+        const float deltaTime = currentFrame - m_lastFrameTime;
+        m_lastFrameTime = deltaTime;
+
+        CameraSystem::UpdateCamera(m_camera, deltaTime);
+
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        m_rotation.x += 0.0125f;
-        m_rotation.y += 0.025f;
-        TransformSystem::SetRotation(m_cubeTransform, m_rotation);
+        const glm::mat4 &modelMatrix = TransformSystem::GetModelMatrix(m_cubeTransform);
+        const glm::mat4 &viewMatrix = CameraSystem::GetViewMatrix(m_camera);
+        const glm::mat4 &projMatrix = CameraSystem::GetProjectionMatrix(m_camera);
 
-        MaterialSystem::SetMat4(m_defaultMaterial, "model", TransformSystem::GetModelMatrix(m_cubeTransform));
+        MaterialSystem::SetMat4(m_defaultMaterial, "model", modelMatrix);
+        MaterialSystem::SetMat4(m_defaultMaterial, "view", viewMatrix);
+        MaterialSystem::SetMat4(m_defaultMaterial, "projection", projMatrix);
 
         TextureSystem::Bind(m_texture, 0);
-
         MaterialSystem::Bind(m_defaultMaterial);
-
         MeshSystem::Bind(m_cubeMesh);
         MeshSystem::Draw(m_cubeMesh);
-        MeshSystem::Unbind();
 
+        MeshSystem::Unbind();
         MaterialSystem::Unbind();
         TextureSystem::Unbind(0);
     }
 
     void CleanUp() {
+        CameraSystem::CleanUp();
         TransformSystem::CleanUp();
         TextureSystem::CleanUp();
         MeshSystem::CleanUp();
@@ -149,5 +164,8 @@ namespace Renderer {
         m_defaultShader = nullptr;
         m_defaultMaterial = nullptr;
         m_cubeMesh = nullptr;
+        m_cubeTransform = nullptr;
+        m_texture = nullptr;
+        m_camera = nullptr;
     }
 }

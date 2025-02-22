@@ -154,6 +154,18 @@ namespace Backend {
 		return (w == 0 || h == 0);
 	}
 
+	float GetWindowWidth() {
+		return m_currentWindowWidth;
+	}
+
+	float GetWindowHeight() {
+		return m_currentWindowHeight;
+	}
+
+	float GetWindowTime() {
+		return glfwGetTime();
+	}
+
 	void framebuffer_resize_callback(GLFWwindow * /*window*/, int /*w*/, int /*h*/) {
 	}
 
