@@ -1,22 +1,20 @@
 #include "renderer.h"
 
-#include <material_system.h>
-
-#include "shader_manager.h"
+#include "material_system.h"
+#include "mesh_system.h"
 #include "shader_system.h"
 
 #include <vector>
 
 namespace Renderer {
-    std::vector<Vertex> m_vertices;
-    GLuint m_VBO = 0;
-    GLuint m_VAO = 0;
     ShaderSystem::Shader *m_defaultShader = nullptr;
     MaterialSystem::Material *m_defaultMaterial = nullptr;
+    MeshSystem::Mesh *m_triangleMesh = nullptr;
 
     void Init() {
         ShaderSystem::Init();
         MaterialSystem::Init();
+        MeshSystem::Init();
 
         m_defaultShader = ShaderSystem::CreateShader(
             "default",
@@ -36,29 +34,17 @@ namespace Renderer {
 
         MaterialSystem::SetVec3(m_defaultMaterial, "color", glm::vec3(1.0f, 1.0f, 1.0f));
 
-        glGenBuffers(1, &m_VBO);
-        glGenVertexArrays(1, &m_VAO);
-
-        m_vertices = {
-            Vertex(-0.5f, -0.5f, 0.0f),
-            Vertex(0.5f, -0.5f, 0.0f),
-            Vertex(0.0f, 0.5f, 0.0f)
+        const std::vector<Vertex> vertices = {
+            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.0f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}}
         };
 
-        glBindVertexArray(m_VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferData(
-            GL_ARRAY_BUFFER,
-            m_vertices.size() * sizeof(Vertex),
-            m_vertices.data(),
-            GL_STATIC_DRAW
-        );
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) 0);
-        glEnableVertexAttribArray(0);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        m_triangleMesh = MeshSystem::CreateMesh("triangle", vertices);
+        if (!m_triangleMesh) {
+            ErrorHandler::ThrowError("Failed to create mesh", __FILE__,
+                                     __func__, __LINE__);
+        }
     }
 
     void Render() {
@@ -67,28 +53,20 @@ namespace Renderer {
 
         MaterialSystem::Bind(m_defaultMaterial);
 
-        glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-        glBindVertexArray(0);
+        MeshSystem::Bind(m_triangleMesh);
+        MeshSystem::Draw(m_triangleMesh);
+        MeshSystem::Unbind();
 
         MaterialSystem::Unbind();
     }
 
     void CleanUp() {
-        if (m_VBO != 0) {
-            glDeleteBuffers(1, &m_VBO);
-        }
-
-        if (m_VAO != 0) {
-            glDeleteVertexArrays(1, &m_VAO);
-        }
-
+        MeshSystem::CleanUp();
         MaterialSystem::CleanUp();
         ShaderSystem::CleanUp();
 
-        m_VBO = 0;
-        m_VAO = 0;
         m_defaultShader = nullptr;
         m_defaultMaterial = nullptr;
+        m_triangleMesh = nullptr;
     }
 }
