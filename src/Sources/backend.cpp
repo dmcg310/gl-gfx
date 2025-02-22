@@ -68,6 +68,8 @@ namespace Backend {
 			ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__, __LINE__);
 		}
 
+		glEnable(GL_DEPTH_TEST);
+
 		Input::Init();
 	}
 
