@@ -38,6 +38,10 @@ namespace MaterialSystem {
         material->properties[name] = Property{Property::Type::Float, value};
     }
 
+    void SetInt(Material *material, const std::string &name, int value) {
+        material->properties[name] = Property{Property::Type::Int, value};
+    }
+
     void SetVec2(Material *material, const std::string &name, const glm::vec2 &value) {
         material->properties[name] = Property{Property::Type::Vec2, value};
     }
@@ -69,6 +73,9 @@ namespace MaterialSystem {
                 switch (prop.type) {
                     case Property::Type::Float:
                         ShaderSystem::SetFloat(material->shader, name, std::any_cast<float>(prop.value));
+                        break;
+                    case Property::Type::Int:
+                        ShaderSystem::SetInt(material->shader, name, std::any_cast<int>(prop.value));
                         break;
                     case Property::Type::Vec2:
                         ShaderSystem::SetVec2(material->shader, name, std::any_cast<glm::vec2>(prop.value));

@@ -4,6 +4,7 @@ namespace MeshSystem {
     static std::unordered_map<std::string, Mesh> m_meshes;
 
     void Init() {
+        m_meshes.clear();
     }
 
     Mesh *CreateMesh(const std::string &name, const std::vector<Vertex> &vertices,
@@ -12,6 +13,7 @@ namespace MeshSystem {
         mesh.name = name;
         mesh.hasIndices = !indices.empty();
         mesh.indexCount = indices.size();
+        mesh.vertexCount = vertices.size();
 
         glGenVertexArrays(1, &mesh.vao);
         glBindVertexArray(mesh.vao);
@@ -69,7 +71,7 @@ namespace MeshSystem {
         if (mesh->hasIndices) {
             glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, nullptr);
         } else {
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawArrays(GL_TRIANGLES, 0, mesh->vertexCount);
         }
     }
 

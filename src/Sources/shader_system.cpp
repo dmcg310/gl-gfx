@@ -60,9 +60,15 @@ namespace ShaderSystem {
         return location;
     }
 
-    void SetFloat(const Shader *shader, const std::string &name, float value) {
+    void SetFloat(const Shader *shader, const std::string &name, const float value) {
         if (const GLint location = GetUniformLocation(shader, name); location != -1) {
             glUniform1f(location, value);
+        }
+    }
+
+    void SetInt(const Shader *shader, const std::string &name, const int value) {
+        if (const GLint location = GetUniformLocation(shader, name); location != -1) {
+            glUniform1i(location, value);
         }
     }
 

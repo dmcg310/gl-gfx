@@ -7,6 +7,7 @@ namespace MeshSystem {
         GLuint vao;
         GLuint vbo;
         GLuint ebo;
+        uint32_t vertexCount;
         uint32_t indexCount;
         bool hasIndices;
         std::string name;

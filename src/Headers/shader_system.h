@@ -22,6 +22,8 @@ namespace ShaderSystem {
 
     void SetFloat(const Shader *shader, const std::string &name, float value);
 
+    void SetInt(const Shader *shader, const std::string &name, int value);
+
     void SetVec2(const Shader *shader, const std::string &name, const glm::vec2 &value);
 
     void SetVec3(const Shader *shader, const std::string &name, const glm::vec3 &value);

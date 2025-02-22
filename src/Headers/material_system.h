@@ -9,6 +9,7 @@ namespace MaterialSystem {
     struct Property {
         enum class Type {
             Float,
+            Int,
             Vec2,
             Vec3,
             Vec4,
@@ -32,6 +33,8 @@ namespace MaterialSystem {
     Material *GetMaterial(const std::string &name);
 
     void SetFloat(Material *material, const std::string &name, float value);
+
+    void SetInt(Material *material, const std::string &name, int value);
 
     void SetVec2(Material *material, const std::string &name, const glm::vec2 &value);
 
