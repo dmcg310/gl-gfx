@@ -166,7 +166,10 @@ namespace Backend {
 		return glfwGetTime();
 	}
 
-	void framebuffer_resize_callback(GLFWwindow * /*window*/, int /*w*/, int /*h*/) {
+	void framebuffer_resize_callback(GLFWwindow */*window*/, const int w, const int h) {
+		glViewport(0, 0, w, h);
+		m_currentWindowWidth = w;
+		m_currentWindowHeight = h;
 	}
 
 	void window_focus_callback(GLFWwindow * /*window*/, int /*focused*/) {
