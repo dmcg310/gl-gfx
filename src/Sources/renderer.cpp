@@ -1,5 +1,9 @@
 #include "renderer.h"
+
+#include <material_system.h>
+
 #include "shader_manager.h"
+#include "shader_system.h"
 
 #include <vector>
 
@@ -7,19 +11,30 @@ namespace Renderer {
     std::vector<Vertex> m_vertices;
     GLuint m_VBO = 0;
     GLuint m_VAO = 0;
-    GLuint m_shaderProgram = 0;
+    ShaderSystem::Shader *m_defaultShader = nullptr;
+    MaterialSystem::Material *m_defaultMaterial = nullptr;
 
     void Init() {
-        m_shaderProgram = ShaderManager::CreateProgram(
+        ShaderSystem::Init();
+        MaterialSystem::Init();
+
+        m_defaultShader = ShaderSystem::CreateShader(
+            "default",
             "../src/Shaders/triangle.vert",
             "../src/Shaders/triangle.frag"
         );
-        if (m_shaderProgram == 0) {
-            ErrorHandler::ThrowError(
-                "Failed to create shader program",
-                __FILE__, __func__, __LINE__
-            );
+        if (!m_defaultShader) {
+            ErrorHandler::ThrowError("Failed to create default shader", __FILE__,
+                                     __func__, __LINE__);
         }
+
+        m_defaultMaterial = MaterialSystem::CreateMaterial("default", "default");
+        if (!m_defaultMaterial) {
+            ErrorHandler::ThrowError("Failed to create default material", __FILE__,
+                                     __func__, __LINE__);
+        }
+
+        MaterialSystem::SetVec3(m_defaultMaterial, "color", glm::vec3(1.0f, 1.0f, 1.0f));
 
         glGenBuffers(1, &m_VBO);
         glGenVertexArrays(1, &m_VAO);
@@ -50,9 +65,13 @@ namespace Renderer {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(m_shaderProgram);
+        MaterialSystem::Bind(m_defaultMaterial);
+
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+        glBindVertexArray(0);
+
+        MaterialSystem::Unbind();
     }
 
     void CleanUp() {
@@ -64,14 +83,12 @@ namespace Renderer {
             glDeleteVertexArrays(1, &m_VAO);
         }
 
-        if (m_shaderProgram != 0) {
-            glDeleteProgram(m_shaderProgram);
-        }
-
-        ShaderManager::CleanUp();
+        MaterialSystem::CleanUp();
+        ShaderSystem::CleanUp();
 
         m_VBO = 0;
         m_VAO = 0;
-        m_shaderProgram = 0;
+        m_defaultShader = nullptr;
+        m_defaultMaterial = nullptr;
     }
 }
