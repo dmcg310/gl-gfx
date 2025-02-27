@@ -30,6 +30,8 @@ namespace MaterialSystem {
 
     Material *CreateMaterial(const std::string &name, const std::string &shaderName);
 
+    Material *CreateDefaultMaterial(const std::string &name);
+
     Material *GetMaterial(const std::string &name);
 
     void SetFloat(Material *material, const std::string &name, float value);

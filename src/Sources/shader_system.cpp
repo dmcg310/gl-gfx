@@ -16,6 +16,7 @@ namespace ShaderSystem {
             .programId = ShaderManager::CreateProgram(vertPath, fragPath),
             .vertPath = vertPath,
             .fragPath = fragPath,
+            .name = name,
             .isValid = false,
         };
 

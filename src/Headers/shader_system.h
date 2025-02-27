@@ -7,6 +7,7 @@ namespace ShaderSystem {
         GLuint programId;
         std::string vertPath;
         std::string fragPath;
+        std::string name;
         bool isValid;
     };
 
