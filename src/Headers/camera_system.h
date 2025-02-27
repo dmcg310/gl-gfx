@@ -13,7 +13,7 @@ namespace CameraSystem {
         float yaw{-90.0f};
         float pitch{0.0f};
 
-        float moveSpeed{0.0005f};
+        float moveSpeed{0.00025f};
         float mouseSensitivity{0.1f};
         float zoom{45.0f};
 
