@@ -35,7 +35,7 @@ namespace MaterialSystem {
 
         SetVec3(material, "color", glm::vec3(1.0f));
         SetInt(material, "mainTexture", 0);
-        SetInt(material, "useTexture", 1);
+        SetInt(material, "useTexture", 0);
 
         return material;
     }

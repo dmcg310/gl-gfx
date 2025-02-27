@@ -11,6 +11,10 @@ namespace MeshSystem {
         uint32_t indexCount;
         bool hasIndices;
         std::string name;
+        GLuint instanceVBO = 0;
+        uint32_t maxInstances = 0;
+        uint32_t instanceCount = 0;
+        bool isInstanced;
     };
 
     void Init();
@@ -23,11 +27,15 @@ namespace MeshSystem {
 
     Mesh *GetMesh(const std::string &name);
 
+    void SetupInstancedMesh(Mesh *mesh, uint32_t maxInstances);
+
+    void UpdateInstanceData(Mesh *mesh, const std::vector<InstanceData> &instances);
+
     void Bind(const Mesh *mesh);
 
     void Unbind();
 
-    void Draw(const Mesh *mesh);
+    void DrawInstanced(const Mesh *mesh);
 
     void CleanUp();
 }

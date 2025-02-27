@@ -9,37 +9,24 @@
 #include "camera_system.h"
 
 namespace Renderer {
-  struct RenderCommand {
+  struct BatchGroup {
     MeshSystem::Mesh *mesh;
     MaterialSystem::Material *material;
     TextureSystem::Texture *texture;
-    glm::mat4 modelMatrix;
-
-    bool operator<(const RenderCommand &other) const {
-      if (material != other.material) {
-        return material < other.material;
-      }
-
-      if (texture != other.texture) {
-        return texture < other.texture;
-      }
-
-      return mesh < other.mesh;
-    }
+    std::vector<InstanceData> instances;
   };
 
   void Init();
 
   void UpdateProjection();
 
-  void Submit(
+  void SubmitInstanced(
     MeshSystem::Mesh *mesh,
     MaterialSystem::Material *material,
     TextureSystem::Texture *texture,
-    TransformSystem::Transform *transform
+    const glm::mat4 &modelMatrix,
+    const glm::vec4 &color = glm::vec4(1.0f)
   );
-
-  void ClearQueue();
 
   void SetMainCamera(CameraSystem::Camera *camera);
 

@@ -11,10 +11,11 @@ namespace SceneSystem {
         m_entityPtrs.clear();
     }
 
-    Entity *CreateEntity(const std::string &name) {
+    Entity *CreateEntity(const std::string &name, const glm::vec4 &color) {
         Entity entity;
         entity.name = name;
         entity.transform = TransformSystem::CreateTransform(name);
+        entity.color = color;
 
         m_entities[name] = entity;
         m_entityPtrs.push_back(&m_entities[name]);
@@ -44,15 +45,14 @@ namespace SceneSystem {
     }
 
     void Update() {
-        Renderer::ClearQueue();
-
         for (const auto *entity: m_entityPtrs) {
             if (entity->isActive) {
-                Renderer::Submit(
+                Renderer::SubmitInstanced(
                     entity->mesh,
                     entity->material,
                     entity->texture,
-                    entity->transform
+                    TransformSystem::GetModelMatrix(entity->transform),
+                    entity->color
                 );
             }
         }

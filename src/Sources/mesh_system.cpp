@@ -53,6 +53,50 @@ namespace MeshSystem {
         return (it != m_meshes.end()) ? &it->second : nullptr;
     }
 
+    void SetupInstancedMesh(Mesh *mesh, uint32_t maxInstances) {
+        if (!mesh) {
+            return;
+        }
+
+        mesh->maxInstances = maxInstances;
+        mesh->instanceCount = 0;
+        mesh->isInstanced = true;
+
+        glGenBuffers(1, &mesh->instanceVBO);
+        glBindVertexArray(mesh->vao);
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceVBO);
+
+        glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(InstanceData), nullptr, GL_DYNAMIC_DRAW);
+
+        for (int i = 0; i < 4; i++) {
+            glEnableVertexAttribArray(3 + i);
+            glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData), (void *) (sizeof(float) * i * 4));
+            glVertexAttribDivisor(3 + i, 1);
+        }
+
+        glEnableVertexAttribArray(7);
+        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData), (void *) (sizeof(glm::mat4)));
+        glVertexAttribDivisor(7, 1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    void UpdateInstanceData(Mesh *mesh, const std::vector<InstanceData> &instances) {
+        if (!mesh || !mesh->isInstanced) {
+            return;
+        }
+
+        mesh->instanceCount = std::min((uint32_t) instances.size(), mesh->maxInstances);
+        if (mesh->instanceCount == 0) {
+            return;
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, mesh->instanceCount * sizeof(InstanceData), instances.data());
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
     void Bind(const Mesh *mesh) {
         if (mesh) {
             glBindVertexArray(mesh->vao);
@@ -63,15 +107,15 @@ namespace MeshSystem {
         glBindVertexArray(0);
     }
 
-    void Draw(const Mesh *mesh) {
-        if (!mesh) {
+    void DrawInstanced(const Mesh *mesh) {
+        if (!mesh || !mesh->isInstanced || mesh->instanceCount == 0) {
             return;
         }
 
         if (mesh->hasIndices) {
-            glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, nullptr);
+            glDrawElementsInstanced(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, nullptr, mesh->instanceCount);
         } else {
-            glDrawArrays(GL_TRIANGLES, 0, mesh->vertexCount);
+            glDrawArraysInstanced(GL_TRIANGLES, 0, mesh->vertexCount, mesh->instanceCount);
         }
     }
 

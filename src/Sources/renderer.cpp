@@ -12,9 +12,19 @@ namespace Renderer {
     TextureSystem::Texture *m_defaultTexture = nullptr;
     CameraSystem::Camera *m_mainCamera = nullptr;
 
-    std::vector<RenderCommand> m_renderQueue;
+    static std::unordered_map<size_t, BatchGroup> m_batchGroups;
 
     float m_lastFrameTime = 0.0f;
+    constexpr uint32_t maxInstances = 2048;
+
+    static size_t ComputeBatchHash(MeshSystem::Mesh *mesh, MaterialSystem::Material *material,
+                                   TextureSystem::Texture *texture) {
+        size_t hash = 0;
+        hash = std::hash<void *>{}(mesh);
+        hash ^= std::hash<void *>{}(material) << 1;
+        hash ^= std::hash<void *>{}(texture) << 2;
+        return hash;
+    }
 
     void Init() {
         ShaderSystem::Init();
@@ -129,25 +139,23 @@ namespace Renderer {
         CameraSystem::SetProjection(m_mainCamera, 45.0f, aspectRatio, 0.1f, 100.f);
     }
 
-    void Submit(MeshSystem::Mesh *mesh, MaterialSystem::Material *material, TextureSystem::Texture *texture,
-                TransformSystem::Transform *transform) {
-        if (!mesh || !material || !transform) {
-            ErrorHandler::Warn("Error submitting command to renderer. Mesh, transform or material not set", __FILE__,
-                               __func__, __LINE__);
+    void SubmitInstanced(MeshSystem::Mesh *mesh, MaterialSystem::Material *material, TextureSystem::Texture *texture,
+                         const glm::mat4 &modelMatrix, const glm::vec4 &color) {
+        if (!mesh || !material || !texture) {
+            ErrorHandler::Warn("Error submitting instanced command to renderer. Mesh, transform or material not set",
+                               __FILE__, __func__, __LINE__);
             return;
         }
 
-        RenderCommand cmd{};
-        cmd.mesh = mesh;
-        cmd.material = material;
-        cmd.texture = texture;
-        cmd.modelMatrix = TransformSystem::GetModelMatrix(transform);
+        InstanceData instance{};
+        instance.modelMatrix = modelMatrix;
+        instance.color = color;
 
-        m_renderQueue.push_back(cmd);
-    }
-
-    void ClearQueue() {
-        m_renderQueue.clear();
+        const size_t batchHash = ComputeBatchHash(mesh, material, texture);
+        m_batchGroups[batchHash].mesh = mesh;
+        m_batchGroups[batchHash].material = material;
+        m_batchGroups[batchHash].texture = texture;
+        m_batchGroups[batchHash].instances.push_back(instance);
     }
 
     void SetMainCamera(CameraSystem::Camera *camera) {
@@ -159,7 +167,6 @@ namespace Renderer {
     }
 
     void Render() {
-        // TODO: fix, this is wrong
         const float currentFrame = Backend::GetWindowTime();
         const float deltaTime = currentFrame - m_lastFrameTime;
         m_lastFrameTime = deltaTime;
@@ -179,7 +186,7 @@ namespace Renderer {
             lastHeight = currentHeight;
         }
 
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (!m_mainCamera) {
@@ -189,63 +196,51 @@ namespace Renderer {
         const glm::mat4 &viewMatrix = CameraSystem::GetViewMatrix(m_mainCamera);
         const glm::mat4 &projMatrix = CameraSystem::GetProjectionMatrix(m_mainCamera);
 
-        std::sort(m_renderQueue.begin(), m_renderQueue.end());
-
-        MaterialSystem::Material *currentMaterial = nullptr;
-        TextureSystem::Texture *currentTexture = nullptr;
-        MeshSystem::Mesh *currentMesh = nullptr;
-
-        for (const auto &[mesh, material, texture, modelMatrix]: m_renderQueue) {
-            if (material != currentMaterial) {
-                if (currentMaterial) {
-                    MaterialSystem::Unbind();
-                }
-
-                MaterialSystem::SetMat4(material, "view", viewMatrix);
-                MaterialSystem::SetMat4(material, "projection", projMatrix);
-                MaterialSystem::Bind(material);
-
-                currentMaterial = material;
+        for (auto &[_, batch]: m_batchGroups) {
+            if (batch.instances.empty()) {
+                continue;
             }
 
-            if (texture != currentTexture) {
-                if (currentTexture) {
+            size_t instancesProcessed = 0;
+            while (instancesProcessed < batch.instances.size()) {
+                const size_t currentBatchSize = std::min((size_t) maxInstances,
+                                                         batch.instances.size() - instancesProcessed);
+
+                std::vector<InstanceData> currentBatchInstances(
+                    batch.instances.begin() + instancesProcessed,
+                    batch.instances.begin() + instancesProcessed + currentBatchSize
+                );
+
+                if (!batch.mesh->isInstanced) {
+                    MeshSystem::SetupInstancedMesh(batch.mesh, maxInstances);
+                }
+
+                MeshSystem::UpdateInstanceData(batch.mesh, currentBatchInstances);
+
+                MaterialSystem::Bind(batch.material);
+                MaterialSystem::SetMat4(batch.material, "view", viewMatrix);
+                MaterialSystem::SetMat4(batch.material, "projection", projMatrix);
+                MaterialSystem::SetInt(batch.material, "useInstanceColor", 1);
+
+                if (batch.texture) {
+                    TextureSystem::Bind(batch.texture, 0);
+                }
+
+                MeshSystem::Bind(batch.mesh);
+                MeshSystem::DrawInstanced(batch.mesh);
+                MeshSystem::Unbind();
+
+                if (batch.texture) {
                     TextureSystem::Unbind();
                 }
 
-                if (texture) {
-                    TextureSystem::Bind(texture);
-                }
+                MaterialSystem::Unbind();
 
-                currentTexture = texture;
+                instancesProcessed += currentBatchSize;
             }
-
-            if (mesh != currentMesh) {
-                if (currentMesh) {
-                    MeshSystem::Unbind();
-                }
-
-                MeshSystem::Bind(mesh);
-
-                currentMesh = mesh;
-            }
-
-            MaterialSystem::SetMat4(currentMaterial, "model", modelMatrix);
-
-            MeshSystem::Draw(mesh);
         }
 
-        if (currentMesh) {
-            MeshSystem::Unbind();
-        }
-
-        if (currentMaterial) {
-            MaterialSystem::Unbind();
-        }
-
-        if (currentTexture) {
-            TextureSystem::Unbind();
-        }
+        m_batchGroups.clear();
     }
 
     MeshSystem::Mesh *GetDefaultCubeMesh() {
@@ -268,7 +263,6 @@ namespace Renderer {
         MaterialSystem::CleanUp();
         ShaderSystem::CleanUp();
 
-        m_renderQueue.clear();
         m_defaultShader = nullptr;
         m_defaultMaterial = nullptr;
         m_cubeMesh = nullptr;

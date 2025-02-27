@@ -15,11 +15,12 @@ namespace SceneSystem {
         TextureSystem::Texture *texture = nullptr;
         TransformSystem::Transform *transform = nullptr;
         bool isActive = true;
+        glm::vec4 color = glm::vec4(1.0f);
     };
 
     void Init();
 
-    Entity *CreateEntity(const std::string &name);
+    Entity *CreateEntity(const std::string &name, const glm::vec4 &color);
 
     Entity *GetEntity(const std::string &name);
 
