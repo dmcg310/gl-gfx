@@ -26,20 +26,6 @@ namespace MaterialSystem {
         return &m_materials[name];
     }
 
-    Material *CreateDefaultMaterial(const std::string &name) {
-        Material *material = CreateMaterial(name, "default");
-        if (!material) {
-            ErrorHandler::Warn("Failed to create default material", __FILE__, __func__, __LINE__);
-            return nullptr;
-        }
-
-        SetVec3(material, "color", glm::vec3(1.0f));
-        SetInt(material, "mainTexture", 0);
-        SetInt(material, "useTexture", 0);
-
-        return material;
-    }
-
     Material *GetMaterial(const std::string &name) {
         if (const auto it = m_materials.find(name); it != m_materials.end()) {
             return &it->second;

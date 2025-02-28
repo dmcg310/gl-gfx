@@ -7,38 +7,50 @@
 #include "mesh_system.h"
 #include "texture_system.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 namespace ResourceManager {
     void Init();
 
-    MeshSystem::Mesh *LoadMesh(const std::string &name, const std::vector<Vertex> &vertices,
-                               const std::vector<uint32_t> &indices = std::vector<uint32_t>());
+    MeshSystem::Mesh *LoadMesh(const std::string &name, const std::string &filePath);
 
     MeshSystem::Mesh *GetMesh(const std::string &name);
 
-    MeshSystem::Mesh *GetDefaultCubeMesh();
-
-    TextureSystem::Texture *LoadTexture(const std::string &name, const std::string &filePath);
+    TextureSystem::Texture *LoadTexture(const std::string &name, const std::string &filePath, bool generateMips = true);
 
     TextureSystem::Texture *GetTexture(const std::string &name);
 
-    TextureSystem::Texture *GetDefaultTexture();
-
-    ShaderSystem::Shader *LoadShader(const std::string &name,
-                                     const std::string &vertexPath,
-                                     const std::string &fragmentPath);
+    ShaderSystem::Shader *LoadShader(const std::string &name, const std::string &vertPath, const std::string &fragPath);
 
     ShaderSystem::Shader *GetShader(const std::string &name);
 
-    ShaderSystem::Shader *GetDefaultShader();
-
     MaterialSystem::Material *CreateMaterial(const std::string &name, const std::string &shaderName);
-
-    MaterialSystem::Material *CreateDefaultMaterial(const std::string &name);
 
     MaterialSystem::Material *GetMaterial(const std::string &name);
 
+    MeshSystem::Mesh *GetDefaultCubeMesh();
+
+    TextureSystem::Texture *GetDefaultTexture();
+
+    ShaderSystem::Shader *GetDefaultShader();
+
     MaterialSystem::Material *GetDefaultMaterial();
 
+    MeshSystem::Mesh *CreateDefaultCubeMesh();
+
+    TextureSystem::Texture *CreateDefaultTexture();
+
+    ShaderSystem::Shader *CreateDefaultShader();
+
+    MaterialSystem::Material *CreateDefaultMaterial();
+
+    void ProcessAssimpMesh(const aiScene *scene, const aiMesh *mesh, std::vector<Vertex> &vertices,
+                           std::vector<uint32_t> &indices);
+
+    bool LoadMeshDataFromFile(const std::string &filePath, std::vector<Vertex> &vertices,
+                              std::vector<uint32_t> &indices);
 
     void CleanUp();
 }

@@ -12,6 +12,7 @@ compile_commands.json
 *.lo
 *.o
 *.obj
+!Assets/Models/*.obj
 
 # Precompiled Headers
 *.gch
