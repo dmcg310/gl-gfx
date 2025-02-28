@@ -1,8 +1,8 @@
 #include "app.h"
 
 #include "backend.h"
+#include "render_system.h"
 #include "resource_manager.h"
-#include "renderer.h"
 #include "scene_system.h"
 
 #include <chrono>
@@ -11,8 +11,13 @@ namespace App {
     void Run() {
         Backend::Init();
         ResourceManager::Init();
-        Renderer::Init();
+        RenderSystem::Init();
         SceneSystem::Init();
+
+        const auto *camera = RenderSystem::GetMainCamera();
+        auto *cameraTransform = CameraSystem::GetTransform(camera);
+        TransformSystem::SetPosition(cameraTransform, glm::vec3(0.0f, 15.0f, 30.0f));
+        TransformSystem::SetRotation(cameraTransform, glm::vec3(-15.0f, 0.0f, 0.0f));
 
         auto *sharedMaterial = ResourceManager::CreateDefaultMaterial("shared_material");
         MaterialSystem::SetInt(sharedMaterial, "useInstanceColor", 1);
@@ -50,7 +55,14 @@ namespace App {
             }
         }
 
+        float lastTime = Backend::GetWindowTime();
+        float deltaTime = 0.0f;
+
         while (Backend::WindowIsOpen()) {
+            const float currentTime = Backend::GetWindowTime();
+            deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
             if (Backend::WindowIsMinimized()) {
                 continue;
             }
@@ -62,14 +74,14 @@ namespace App {
 
             Backend::PrepareUi();
 
-            Renderer::Render();
+            RenderSystem::Render(deltaTime);
             Backend::RenderUi();
 
             Backend::EndFrame();
         }
 
         SceneSystem::CleanUp();
-        Renderer::CleanUp();
+        RenderSystem::CleanUp();
         ResourceManager::CleanUp();
         Backend::CleanUp();
     }

@@ -16,8 +16,6 @@ namespace Renderer {
 
   void Init();
 
-  void UpdateProjection();
-
   void SetClearColor(const glm::vec4 &color);
 
   glm::vec4 GetClearColor();
@@ -30,7 +28,7 @@ namespace Renderer {
     const glm::vec4 &color = glm::vec4(1.0f)
   );
 
-  void Render();
+  void Render(const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix);
 
   void CleanUp();
 };

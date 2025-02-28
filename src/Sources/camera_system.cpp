@@ -6,14 +6,23 @@
 
 namespace CameraSystem {
     static std::unordered_map<std::string, Camera> m_cameras;
+    static Camera *m_mainCamera = nullptr;
 
     void Init() {
         m_cameras.clear();
+        m_mainCamera = nullptr;
     }
 
     Camera *CreateCamera(const std::string &name) {
-        constexpr Camera camera{};
+        Camera camera{};
+        camera.name = name;
+        camera.transform = TransformSystem::CreateTransform(name + "_transform");
+
         m_cameras[name] = camera;
+
+        if (!m_mainCamera) {
+            m_mainCamera = &m_cameras[name];
+        }
 
         return &m_cameras[name];
     }
@@ -36,7 +45,7 @@ namespace CameraSystem {
     }
 
     void UpdateCamera(Camera *camera, const float deltaTime) {
-        if (!camera) {
+        if (!camera || !camera->transform) {
             return;
         }
 
@@ -92,6 +101,8 @@ namespace CameraSystem {
             camera->projMatrix = glm::perspective(glm::radians(camera->zoom), aspect, 0.1f, 100.0f);
         }
 
+        TransformSystem::SetPosition(camera->transform, camera->position);
+
         UpdateCameraVectors(camera);
     }
 
@@ -101,6 +112,10 @@ namespace CameraSystem {
             return;
         }
 
+        camera->fov = fov;
+        camera->aspectRatio = aspect;
+        camera->nearPlane = nearPlane;
+        camera->farPlane = farPlane;
         camera->projMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
     }
 
@@ -125,6 +140,32 @@ namespace CameraSystem {
         }
 
         return camera->projMatrix;
+    }
+
+    TransformSystem::Transform *GetTransform(const Camera *camera) {
+        return camera ? camera->transform : nullptr;
+    }
+
+    void SetMainCamera(Camera *camera) {
+        m_mainCamera = camera;
+    }
+
+    Camera *GetMainCamera() {
+        return m_mainCamera;
+    }
+
+    void UpdateMainCameraProjection(const float windowWidth, const float windowHeight) {
+        if (!m_mainCamera) {
+            return;
+        }
+
+        float height = windowHeight;
+        if (height <= 0) {
+            height = 1.0f;
+        }
+
+        const float aspectRatio = windowWidth / height;
+        SetProjection(m_mainCamera, m_mainCamera->fov, aspectRatio, m_mainCamera->nearPlane, m_mainCamera->farPlane);
     }
 
     void CleanUp() {

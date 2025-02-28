@@ -2,8 +2,13 @@
 
 #include "common.h"
 
+#include "transform_system.h"
+
 namespace CameraSystem {
     struct Camera {
+        std::string name;
+        TransformSystem::Transform *transform = nullptr;
+
         glm::vec3 position{0.0f, 0.0f, 3.0f};
         glm::vec3 front{0.0f, 0.0f, -1.0f};
         glm::vec3 up{0.0f, 0.25f, 0.0f};
@@ -21,6 +26,11 @@ namespace CameraSystem {
         glm::mat4 projMatrix{1.0f};
         bool viewDirty{true};
         bool projDirty{true};
+
+        float fov{45.0f};
+        float aspectRatio{16.0f / 9.0f};
+        float nearPlane{0.1f};
+        float farPlane{100.0f};
     };
 
     void Init();
@@ -36,6 +46,14 @@ namespace CameraSystem {
     const glm::mat4 &GetViewMatrix(Camera *camera);
 
     const glm::mat4 &GetProjectionMatrix(const Camera *camera);
+
+    TransformSystem::Transform *GetTransform(const Camera *camera);
+
+    void SetMainCamera(Camera *camera);
+
+    Camera *GetMainCamera();
+
+    void UpdateMainCameraProjection(float windowWidth, float windowHeight);
 
     void CleanUp();
 }
