@@ -9,6 +9,10 @@ namespace Backend {
 
 	void Update();
 
+	void PrepareUi();
+
+	void RenderUi();
+
 	void EndFrame();
 
 	void CleanUp();

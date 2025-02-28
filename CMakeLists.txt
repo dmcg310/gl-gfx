@@ -27,13 +27,24 @@ else ()
     endif ()
 endif ()
 
+set(IMGUI_SOURCES
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/imgui.cpp
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/imgui_draw.cpp
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/imgui_tables.cpp
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/imgui_widgets.cpp
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/backends/imgui_impl_glfw.cpp
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/backends/imgui_impl_opengl3.cpp
+)
+
 include_directories(src/Headers/
         src/Vendor/assimp/include/
         src/Vendor/bullet/src/
         src/Vendor/glad/include/
         src/Vendor/glfw/include/
         src/Vendor/glm/
-        src/Vendor/stb/)
+        src/Vendor/stb/
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/backends/)
 
 file(GLOB VENDORS_SOURCES src/Vendor/glad/src/glad.c)
 file(GLOB PROJECT_HEADERS src/Headers/*.hpp)
@@ -51,12 +62,17 @@ source_group("Headers" FILES ${PROJECT_HEADERS})
 source_group("Shaders" FILES ${PROJECT_SHADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("Vendors" FILES ${VENDORS_SOURCES})
+source_group("ImGui" FILES ${IMGUI_SOURCES})
 
 add_definitions(-DGLFW_INCLUDE_NONE
         -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
-        ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
-        ${VENDORS_SOURCES})
+add_executable(${PROJECT_NAME}
+        ${PROJECT_SOURCES}
+        ${PROJECT_HEADERS}
+        ${PROJECT_SHADERS}
+        ${PROJECT_CONFIGS}
+        ${VENDORS_SOURCES}
+        ${IMGUI_SOURCES})
 target_link_libraries(${PROJECT_NAME} assimp glfw
         ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
         BulletDynamics BulletCollision LinearMath)

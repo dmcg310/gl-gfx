@@ -1,5 +1,8 @@
 #include "backend.h"
+
 #include "input.h"
+#include "cursor_manager.h"
+#include "ui.h"
 
 #include <enums.h>
 #include <iostream>
@@ -71,6 +74,7 @@ namespace Backend {
 		glEnable(GL_DEPTH_TEST);
 
 		Input::Init();
+		Ui::Init();
 	}
 
 	void BeginFrame() {
@@ -79,9 +83,28 @@ namespace Backend {
 
 	void Update() {
 		Input::Update();
+		CursorManager::Update();
+	}
+
+	void PrepareUi() {
+		if (CursorManager::IsInCameraMode()) {
+			CursorManager::LockCursorMode();
+		}
+
+		Ui::BeginFrame();
+	}
+
+	void RenderUi() {
+		Ui::Render();
 	}
 
 	void EndFrame() {
+		Ui::EndFrame();
+
+		if (CursorManager::IsCursorModeLocked()) {
+			CursorManager::UnlockCursorMode();
+		}
+
 		glfwSwapBuffers(m_window);
 	}
 
@@ -89,6 +112,8 @@ namespace Backend {
 		if (m_windowedMode == WindowedMode::FULLSCREEN) {
 			ToggleFullscreen();
 		}
+
+		Ui::CleanUp();
 
 		glfwTerminate();
 	}

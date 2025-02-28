@@ -1,8 +1,8 @@
 #include "camera_system.h"
 
-#include <backend.h>
-
+#include "backend.h"
 #include "input.h"
+#include "cursor_manager.h"
 
 namespace CameraSystem {
     static std::unordered_map<std::string, Camera> m_cameras;
@@ -37,6 +37,10 @@ namespace CameraSystem {
 
     void UpdateCamera(Camera *camera, const float deltaTime) {
         if (!camera) {
+            return;
+        }
+
+        if (!CursorManager::IsInCameraMode()) {
             return;
         }
 

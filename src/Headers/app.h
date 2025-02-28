@@ -1,7 +1,6 @@
 #pragma once
 
-#include "backend.h"
-#include "renderer.h"
+#include "common.h"
 
 namespace App {
 	void Run();

@@ -1,5 +1,7 @@
 #include "app.h"
 
+#include "backend.h"
+#include "renderer.h"
 #include "scene_system.h"
 
 #include <iostream>
@@ -60,6 +62,10 @@ namespace App {
             deltaTime = currentTime - lastTime;
             lastTime = currentTime;
 
+            if (Backend::WindowIsMinimized()) {
+                continue;
+            }
+
             animationTime += deltaTime;
             frameTimeAccumulator += deltaTime;
             frameCount++;
@@ -76,7 +82,10 @@ namespace App {
             Backend::Update();
             SceneSystem::Update();
 
+            Backend::PrepareUi();
+
             Renderer::Render();
+            Backend::RenderUi();
 
             Backend::EndFrame();
         }
