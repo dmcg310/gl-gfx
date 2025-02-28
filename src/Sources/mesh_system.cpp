@@ -1,5 +1,7 @@
 #include "mesh_system.h"
 
+#include <unordered_map>
+
 namespace MeshSystem {
     static std::unordered_map<std::string, Mesh> m_meshes;
 

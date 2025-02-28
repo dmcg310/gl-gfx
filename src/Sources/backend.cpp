@@ -180,15 +180,15 @@ namespace Backend {
 	}
 
 	float GetWindowWidth() {
-		return m_currentWindowWidth;
+		return (float) m_currentWindowWidth;
 	}
 
 	float GetWindowHeight() {
-		return m_currentWindowHeight;
+		return (float) m_currentWindowHeight;
 	}
 
 	float GetWindowTime() {
-		return glfwGetTime();
+		return (float) glfwGetTime();
 	}
 
 	void framebuffer_resize_callback(GLFWwindow */*window*/, const int w, const int h) {

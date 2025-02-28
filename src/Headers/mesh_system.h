@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#include <vector>
+
 namespace MeshSystem {
     struct Mesh {
         GLuint vao;

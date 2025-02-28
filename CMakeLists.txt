@@ -19,13 +19,21 @@ option(BUILD_UNIT_TESTS OFF)
 add_subdirectory(src/Vendor/bullet)
 
 if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /permissive-")
+    string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+    add_compile_options(/MP)
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /permissive- /std:c++20")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /INCREMENTAL:NO /LTCG")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /INCREMENTAL:NO /LTCG")
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -std=c++20")
+
     if (NOT WIN32)
         set(GLAD_LIBRARIES dl)
     endif ()
 endif ()
+
 
 set(IMGUI_SOURCES
         ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/imgui.cpp
