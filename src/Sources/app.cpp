@@ -8,9 +8,6 @@
 #include <chrono>
 
 namespace App {
-    float frameTimeAccumulator = 0.0f;
-    int frameCount = 0;
-
     void Run() {
         Backend::Init();
         Renderer::Init();
@@ -54,27 +51,10 @@ namespace App {
         }
 
         float animationTime = 0.0f;
-        float lastTime = Backend::GetWindowTime();
-        float deltaTime = 0.0f;
 
         while (Backend::WindowIsOpen()) {
-            const float currentTime = Backend::GetWindowTime();
-            deltaTime = currentTime - lastTime;
-            lastTime = currentTime;
-
             if (Backend::WindowIsMinimized()) {
                 continue;
-            }
-
-            animationTime += deltaTime;
-            frameTimeAccumulator += deltaTime;
-            frameCount++;
-
-            if (frameTimeAccumulator >= 1.0f) {
-                const float fps = frameCount / frameTimeAccumulator;
-                std::cout << "FPS: " << fps << " (" << allCubes.size() << " cubes)" << std::endl;
-                frameTimeAccumulator = 0.0f;
-                frameCount = 0;
             }
 
             Backend::BeginFrame();

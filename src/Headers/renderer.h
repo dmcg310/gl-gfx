@@ -32,6 +32,10 @@ namespace Renderer {
 
   CameraSystem::Camera *GetMainCamera();
 
+  void SetClearColor(const glm::vec4 &color);
+
+  glm::vec4 GetClearColor();
+
   void Render();
 
   MeshSystem::Mesh *GetDefaultCubeMesh();

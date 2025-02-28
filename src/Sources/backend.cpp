@@ -57,7 +57,7 @@ namespace Backend {
 		m_windowedWidth = width;
 		m_windowedHeight = height;
 
-		CreateGLFWWindow(WindowedMode::WINDOWED);
+		CreateGLFWWindow(WindowedMode::FULLSCREEN);
 		if (m_window == NULL) {
 			ErrorHandler::ThrowError("Failed to create GLFW window", __FILE__, __func__, __LINE__);
 		}

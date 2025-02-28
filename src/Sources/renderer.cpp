@@ -13,6 +13,7 @@ namespace Renderer {
     CameraSystem::Camera *m_mainCamera = nullptr;
 
     static std::unordered_map<size_t, BatchGroup> m_batchGroups;
+    static auto m_clearColor = glm::vec4{0.05f, 0.05f, 0.1f, 1.0f};
 
     float m_lastFrameTime = 0.0f;
     constexpr uint32_t maxInstances = 2048;
@@ -166,6 +167,14 @@ namespace Renderer {
         return m_mainCamera;
     }
 
+    void SetClearColor(const glm::vec4 &color) {
+        m_clearColor = color;
+    }
+
+    glm::vec4 GetClearColor() {
+        return m_clearColor;
+    }
+
     void Render() {
         const float currentFrame = Backend::GetWindowTime();
         const float deltaTime = currentFrame - m_lastFrameTime;
@@ -186,7 +195,7 @@ namespace Renderer {
             lastHeight = currentHeight;
         }
 
-        glClearColor(0.05f, 0.05f, 0.1f, 1.0f);
+        glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (!m_mainCamera) {
