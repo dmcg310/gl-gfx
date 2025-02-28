@@ -1,22 +1,16 @@
 #include "renderer.h"
 
 #include "backend.h"
-#include "shader_system.h"
+#include "camera_system.h"
 
 #include <vector>
 
 namespace Renderer {
-    ShaderSystem::Shader *m_defaultShader = nullptr;
-    MaterialSystem::Material *m_defaultMaterial = nullptr;
-    MeshSystem::Mesh *m_cubeMesh = nullptr;
-    TextureSystem::Texture *m_defaultTexture = nullptr;
-    CameraSystem::Camera *m_mainCamera = nullptr;
-
+    static CameraSystem::Camera *m_mainCamera = nullptr;
     static std::unordered_map<size_t, BatchGroup> m_batchGroups;
-    static auto m_clearColor = glm::vec4{0.05f, 0.05f, 0.1f, 1.0f};
-
-    float m_lastFrameTime = 0.0f;
-    constexpr uint32_t maxInstances = 2048;
+    static auto m_clearColor = glm::vec4(0.05f, 0.05f, 0.1f, 1.0f);
+    static float m_lastFrameTime = 0.0f;
+    static const uint32_t maxInstances = 2048;
 
     static size_t ComputeBatchHash(MeshSystem::Mesh *mesh, MaterialSystem::Material *material,
                                    TextureSystem::Texture *texture) {
@@ -28,94 +22,6 @@ namespace Renderer {
     }
 
     void Init() {
-        ShaderSystem::Init();
-        MaterialSystem::Init();
-        MeshSystem::Init();
-        TextureSystem::Init();
-        TransformSystem::Init();
-        CameraSystem::Init();
-
-        m_defaultShader = ShaderSystem::CreateShader(
-            "default",
-            "../src/Shaders/default.vert",
-            "../src/Shaders/default.frag"
-        );
-        if (!m_defaultShader) {
-            ErrorHandler::ThrowError("Failed to create default shader", __FILE__, __func__, __LINE__);
-        }
-
-        m_defaultMaterial = MaterialSystem::CreateMaterial("default", "default");
-        if (!m_defaultMaterial) {
-            ErrorHandler::ThrowError("Failed to create default material", __FILE__, __func__, __LINE__);
-        }
-
-        MaterialSystem::SetVec3(m_defaultMaterial, "color", glm::vec3(1.0f));
-        MaterialSystem::SetInt(m_defaultMaterial, "mainTexture", 0);
-        MaterialSystem::SetInt(m_defaultMaterial, "useTexture", 1);
-
-        m_defaultTexture = TextureSystem::CreateTexture("default", "../assets/textures/default.png");
-        if (!m_defaultTexture) {
-            ErrorHandler::ThrowError("Failed to load texture", __FILE__, __func__, __LINE__);
-        }
-
-        const std::vector<Vertex> vertices = {
-            // Front face
-            {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // 0
-            {{0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}, // 1
-            {{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}}, // 2
-            {{-0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}, // 3
-
-            // Back face
-            {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}}, // 4
-            {{-0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}}, // 5
-            {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}}, // 6
-            {{0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}}, // 7
-
-            // Top face
-            {{-0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}, // 8
-            {{-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}}, // 9
-            {{0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}}, // 10
-            {{0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // 11
-
-            // Bottom face
-            {{-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}}, // 12
-            {{0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}}, // 13
-            {{0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}}, // 14
-            {{-0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}}, // 15
-
-            // Right face
-            {{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 16
-            {{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 17
-            {{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 18
-            {{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 19
-
-            // Left face
-            {{-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 20
-            {{-0.5f, -0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 21
-            {{-0.5f, 0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 22
-            {{-0.5f, 0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}} // 23
-        };
-
-        const std::vector<uint32_t> indices = {
-            // Front face
-            0, 1, 2, 0, 2, 3,
-            // Back face
-            4, 5, 6, 4, 6, 7,
-            // Top face
-            8, 9, 10, 8, 10, 11,
-            // Bottom face
-            12, 13, 14, 12, 14, 15,
-            // Right face
-            16, 17, 18, 16, 18, 19,
-            // Left face
-            20, 21, 22, 20, 22, 23
-        };
-
-        m_cubeMesh = MeshSystem::CreateMesh("cube", vertices, indices);
-        if (!m_cubeMesh) {
-            ErrorHandler::ThrowError("Failed to create mesh", __FILE__, __func__, __LINE__);
-        }
-
         m_mainCamera = CameraSystem::CreateCamera("main");
         if (!m_mainCamera) {
             ErrorHandler::ThrowError("Failed to create camera", __FILE__, __func__, __LINE__);
@@ -157,14 +63,6 @@ namespace Renderer {
         m_batchGroups[batchHash].material = material;
         m_batchGroups[batchHash].texture = texture;
         m_batchGroups[batchHash].instances.push_back(instance);
-    }
-
-    void SetMainCamera(CameraSystem::Camera *camera) {
-        m_mainCamera = camera;
-    }
-
-    CameraSystem::Camera *GetMainCamera() {
-        return m_mainCamera;
     }
 
     void SetClearColor(const glm::vec4 &color) {
@@ -252,30 +150,9 @@ namespace Renderer {
         m_batchGroups.clear();
     }
 
-    MeshSystem::Mesh *GetDefaultCubeMesh() {
-        return m_cubeMesh;
-    }
-
-    MaterialSystem::Material *GetDefaultMaterial() {
-        return m_defaultMaterial;
-    }
-
-    TextureSystem::Texture *GetDefaultTexture() {
-        return m_defaultTexture;
-    }
-
     void CleanUp() {
-        CameraSystem::CleanUp();
-        TransformSystem::CleanUp();
-        TextureSystem::CleanUp();
-        MeshSystem::CleanUp();
-        MaterialSystem::CleanUp();
-        ShaderSystem::CleanUp();
-
-        m_defaultShader = nullptr;
-        m_defaultMaterial = nullptr;
-        m_cubeMesh = nullptr;
-        m_defaultTexture = nullptr;
+        m_batchGroups.clear();
         m_mainCamera = nullptr;
+        m_lastFrameTime = 0.0f;
     }
 }

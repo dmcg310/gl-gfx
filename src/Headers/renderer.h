@@ -5,8 +5,6 @@
 #include "material_system.h"
 #include "mesh_system.h"
 #include "texture_system.h"
-#include "transform_system.h"
-#include "camera_system.h"
 
 namespace Renderer {
   struct BatchGroup {
@@ -20,6 +18,10 @@ namespace Renderer {
 
   void UpdateProjection();
 
+  void SetClearColor(const glm::vec4 &color);
+
+  glm::vec4 GetClearColor();
+
   void SubmitInstanced(
     MeshSystem::Mesh *mesh,
     MaterialSystem::Material *material,
@@ -28,21 +30,7 @@ namespace Renderer {
     const glm::vec4 &color = glm::vec4(1.0f)
   );
 
-  void SetMainCamera(CameraSystem::Camera *camera);
-
-  CameraSystem::Camera *GetMainCamera();
-
-  void SetClearColor(const glm::vec4 &color);
-
-  glm::vec4 GetClearColor();
-
   void Render();
-
-  MeshSystem::Mesh *GetDefaultCubeMesh();
-
-  MaterialSystem::Material *GetDefaultMaterial();
-
-  TextureSystem::Texture *GetDefaultTexture();
 
   void CleanUp();
 };

@@ -1,23 +1,23 @@
 #include "app.h"
 
 #include "backend.h"
+#include "resource_manager.h"
 #include "renderer.h"
 #include "scene_system.h"
 
-#include <iostream>
 #include <chrono>
 
 namespace App {
     void Run() {
         Backend::Init();
+        ResourceManager::Init();
         Renderer::Init();
         SceneSystem::Init();
 
-        std::vector<SceneSystem::Entity *> allCubes;
-
-        auto *sharedMaterial = MaterialSystem::CreateDefaultMaterial("shared_material");
+        auto *sharedMaterial = ResourceManager::CreateDefaultMaterial("shared_material");
         MaterialSystem::SetInt(sharedMaterial, "useInstanceColor", 1);
 
+        std::vector<SceneSystem::Entity *> allCubes;
         constexpr int gridSize = 20; // gridSize x gridSize x gridSize
         constexpr float spacing = 0.8f;
 
@@ -39,9 +39,9 @@ namespace App {
                                            std::to_string(z);
 
                     auto *cube = SceneSystem::CreateEntity(cubeName, cubeColor);
-                    cube->mesh = Renderer::GetDefaultCubeMesh();
+                    cube->mesh = ResourceManager::GetDefaultCubeMesh();
                     cube->material = sharedMaterial;
-                    cube->texture = Renderer::GetDefaultTexture();
+                    cube->texture = ResourceManager::GetDefaultTexture();
 
                     TransformSystem::SetPosition(cube->transform, glm::vec3(xPos, yPos, zPos));
                     TransformSystem::SetScale(cube->transform, glm::vec3(0.35f));
@@ -49,8 +49,6 @@ namespace App {
                 }
             }
         }
-
-        float animationTime = 0.0f;
 
         while (Backend::WindowIsOpen()) {
             if (Backend::WindowIsMinimized()) {
@@ -72,6 +70,7 @@ namespace App {
 
         SceneSystem::CleanUp();
         Renderer::CleanUp();
+        ResourceManager::CleanUp();
         Backend::CleanUp();
     }
 }
