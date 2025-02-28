@@ -9,6 +9,7 @@ namespace ResourceManager {
     std::unordered_map<std::string, MaterialSystem::Material> m_materials;
 
     MeshSystem::Mesh *m_defaultCubeMesh = nullptr;
+    MeshSystem::Mesh *m_defaultPlaneMesh = nullptr;
     TextureSystem::Texture *m_defaultTexture = nullptr;
     ShaderSystem::Shader *m_defaultShader = nullptr;
     MaterialSystem::Material *m_defaultMaterial = nullptr;
@@ -20,6 +21,7 @@ namespace ResourceManager {
         MaterialSystem::Init();
 
         m_defaultCubeMesh = CreateDefaultCubeMesh();
+        m_defaultPlaneMesh = CreateDefaultPlaneMesh();
         m_defaultTexture = CreateDefaultTexture();
         m_defaultShader = CreateDefaultShader();
         m_defaultMaterial = CreateDefaultMaterial();
@@ -156,6 +158,10 @@ namespace ResourceManager {
         return m_defaultCubeMesh;
     }
 
+    MeshSystem::Mesh *GetDefaultPlaneMesh() {
+        return m_defaultPlaneMesh;
+    }
+
     TextureSystem::Texture *GetDefaultTexture() {
         return m_defaultTexture;
     }
@@ -169,7 +175,11 @@ namespace ResourceManager {
     }
 
     MeshSystem::Mesh *CreateDefaultCubeMesh() {
-        return LoadMesh("default", "../Assets/Models/cube.obj");
+        return LoadMesh("cube", "../Assets/Models/cube.obj");
+    }
+
+    MeshSystem::Mesh *CreateDefaultPlaneMesh() {
+        return LoadMesh("plane", "../Assets/Models/plane.obj");
     }
 
     TextureSystem::Texture *CreateDefaultTexture() {
@@ -259,6 +269,7 @@ namespace ResourceManager {
         m_shaders.clear();
 
         m_defaultCubeMesh = nullptr;
+        m_defaultPlaneMesh = nullptr;
         m_defaultTexture = nullptr;
         m_defaultShader = nullptr;
         m_defaultMaterial = nullptr;

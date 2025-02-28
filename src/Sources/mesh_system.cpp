@@ -17,6 +17,13 @@ namespace MeshSystem {
         mesh.indexCount = indices.size();
         mesh.vertexCount = vertices.size();
 
+        mesh.minBounds = glm::vec3(std::numeric_limits<float>::max());
+        mesh.maxBounds = glm::vec3(std::numeric_limits<float>::lowest());
+        for (const auto &vertex: vertices) {
+            mesh.minBounds = glm::min(mesh.minBounds, vertex.position);
+            mesh.maxBounds = glm::max(mesh.maxBounds, vertex.position);
+        }
+
         glGenVertexArrays(1, &mesh.vao);
         glBindVertexArray(mesh.vao);
 

@@ -17,6 +17,8 @@ namespace MeshSystem {
         uint32_t maxInstances = 0;
         uint32_t instanceCount = 0;
         bool isInstanced;
+        glm::vec3 minBounds;
+        glm::vec3 maxBounds;
     };
 
     void Init();

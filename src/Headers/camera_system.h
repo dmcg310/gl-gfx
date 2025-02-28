@@ -9,7 +9,7 @@ namespace CameraSystem {
         std::string name;
         TransformSystem::Transform *transform = nullptr;
 
-        glm::vec3 position{0.0f, 0.0f, 3.0f};
+        glm::vec3 position{0.0f, 0.50f, 3.0f};
         glm::vec3 front{0.0f, 0.0f, -1.0f};
         glm::vec3 up{0.0f, 0.25f, 0.0f};
         glm::vec3 right{1.0f, 0.0f, 0.0f};
@@ -18,7 +18,7 @@ namespace CameraSystem {
         float yaw{-90.0f};
         float pitch{0.0f};
 
-        float moveSpeed{0.45f};
+        float moveSpeed{0.65f};
         float mouseSensitivity{0.1f};
         float zoom{45.0f};
 

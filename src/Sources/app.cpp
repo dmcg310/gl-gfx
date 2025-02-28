@@ -14,19 +14,19 @@ namespace App {
         RenderSystem::Init();
         SceneSystem::Init();
 
-        const auto *camera = RenderSystem::GetMainCamera();
-        auto *cameraTransform = CameraSystem::GetTransform(camera);
-        TransformSystem::SetPosition(cameraTransform, glm::vec3(0.0f, 15.0f, 30.0f));
-        TransformSystem::SetRotation(cameraTransform, glm::vec3(-15.0f, 0.0f, 0.0f));
+        auto *floor = SceneSystem::CreateEntity("floor", glm::vec4(1.0f));
+        floor->mesh = ResourceManager::GetDefaultPlaneMesh();
+        floor->material = ResourceManager::GetDefaultMaterial();
+        floor->texture = ResourceManager::GetDefaultTexture();
+        TransformSystem::SetScale(floor->transform, glm::vec3(100.0f, 1.0f, 100.0f));
+        TransformSystem::SetPosition(floor->transform, glm::vec3(0.0f, floor->mesh->minBounds.y, 0.0f));
 
-        auto *cube = SceneSystem::CreateEntity("cube", glm::vec4(1.0f));
+        auto *cube = SceneSystem::CreateEntity("cube", glm::vec4(0.5f));
         cube->mesh = ResourceManager::GetDefaultCubeMesh();
         cube->material = ResourceManager::GetDefaultMaterial();
         cube->texture = ResourceManager::GetDefaultTexture();
-
-        TransformSystem::SetPosition(cube->transform, glm::vec3(0.0f, 0.0f, 0.0f));
-        TransformSystem::SetScale(cube->transform, glm::vec3(0.35f));
-
+        const float cubeHeightOffset = (cube->mesh->maxBounds.y - cube->mesh->minBounds.y) * 0.5f;
+        TransformSystem::SetPosition(cube->transform, glm::vec3(0.0f, cubeHeightOffset, 0.0f));
 
         float lastTime = Backend::GetWindowTime();
         float deltaTime = 0.0f;

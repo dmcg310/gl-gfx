@@ -32,6 +32,8 @@ namespace ResourceManager {
 
     MeshSystem::Mesh *GetDefaultCubeMesh();
 
+    MeshSystem::Mesh *GetDefaultPlaneMesh();
+
     TextureSystem::Texture *GetDefaultTexture();
 
     ShaderSystem::Shader *GetDefaultShader();
@@ -39,6 +41,8 @@ namespace ResourceManager {
     MaterialSystem::Material *GetDefaultMaterial();
 
     MeshSystem::Mesh *CreateDefaultCubeMesh();
+
+    MeshSystem::Mesh *CreateDefaultPlaneMesh();
 
     TextureSystem::Texture *CreateDefaultTexture();
 
