@@ -48,7 +48,12 @@ namespace Serialisation {
             }
 
             if (entity->texture) {
-                entityTable.insert("texture", entity->texture->name);
+                toml::table texture;
+                texture.insert("name", entity->texture->name);
+                texture.insert("path", entity->texture->path);
+                texture.insert("is_valid", entity->texture->isValid);
+
+                entityTable.insert("texture", texture);
             }
 
             if (entity->material) {
@@ -56,7 +61,13 @@ namespace Serialisation {
                 material.insert("name", entity->material->name);
 
                 if (entity->material->shader) {
-                    material.insert("shader", entity->material->shader->name);
+                    toml::table shader;
+                    shader.insert("name", entity->material->shader->name);
+                    shader.insert("fragment_path", entity->material->shader->fragPath);
+                    shader.insert("vertex_path", entity->material->shader->vertPath);
+                    shader.insert("is_valid", entity->material->shader->isValid);
+
+                    material.insert("shader", shader);
                 }
 
                 toml::table properties;

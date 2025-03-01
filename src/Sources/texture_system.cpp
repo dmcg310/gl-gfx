@@ -91,6 +91,7 @@ namespace TextureSystem {
 
         stbi_image_free(data);
 
+        texture.path = path;
         texture.isValid = true;
         m_textures[name] = texture;
 

@@ -17,15 +17,24 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'pointLight_visual'
-texture = 'default'
 
     [entity.material]
     name = 'pointLight_material'
-    shader = 'default'
 
         [entity.material.properties]
         color = [ 2.0, 2.0, 2.0 ]
         useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'default'
+    path = '../Assets/Textures/default.png'
 
     [entity.transform]
     position = [ 0.0, 2.0, 0.0 ]
@@ -37,11 +46,9 @@ color = [ 0.5, 0.5, 0.5, 0.5 ]
 is_active = true
 mesh = 'plane'
 name = 'floor'
-texture = 'default'
 
     [entity.material]
     name = 'default'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -54,6 +61,17 @@ texture = 'default'
         specularStrength = 0.5
         useTexture = 0
 
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
     [entity.transform]
     position = [ 0.0, 0.0, 0.0 ]
     rotation = [ 0.0, 0.0, 0.0 ]
@@ -64,11 +82,9 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'cube1'
-texture = 'container'
 
     [entity.material]
     name = 'container1'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -80,6 +96,17 @@ texture = 'container'
         shininess = 32.0
         specularStrength = 0.5
         useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'container'
+    path = '../Assets/Textures/container.png'
 
     [entity.transform]
     position = [ 3.0, 0.5, 0.0 ]
@@ -91,11 +118,9 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'cube2'
-texture = 'container'
 
     [entity.material]
     name = 'container2'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -107,6 +132,17 @@ texture = 'container'
         shininess = 32.0
         specularStrength = 0.5
         useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'container'
+    path = '../Assets/Textures/container.png'
 
     [entity.transform]
     position = [ 0.9270509481430054, 0.5, 2.8531696796417236 ]
@@ -118,11 +154,9 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'cube3'
-texture = 'container'
 
     [entity.material]
     name = 'container3'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -134,6 +168,17 @@ texture = 'container'
         shininess = 32.0
         specularStrength = 0.5
         useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'container'
+    path = '../Assets/Textures/container.png'
 
     [entity.transform]
     position = [ -2.427051067352295, 0.5, 1.7633554935455322 ]
@@ -145,11 +190,9 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'cube4'
-texture = 'container'
 
     [entity.material]
     name = 'container4'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -161,6 +204,17 @@ texture = 'container'
         shininess = 32.0
         specularStrength = 0.5
         useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'container'
+    path = '../Assets/Textures/container.png'
 
     [entity.transform]
     position = [ -2.427050828933716, 0.5, -1.76335608959198 ]
@@ -172,11 +226,9 @@ color = [ 1.0, 1.0, 1.0, 1.0 ]
 is_active = true
 mesh = 'cube'
 name = 'cube5'
-texture = 'container'
 
     [entity.material]
     name = 'container5'
-    shader = 'default'
 
         [entity.material.properties]
         ambientColor = [ 0.10000000149011612, 0.10000000149011612, 0.10000000149011612 ]
@@ -188,6 +240,17 @@ texture = 'container'
         shininess = 32.0
         specularStrength = 0.5
         useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        is_valid = true
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.texture]
+    is_valid = true
+    name = 'container'
+    path = '../Assets/Textures/container.png'
 
     [entity.transform]
     position = [ 0.9270513653755188, 0.5, -2.8531694412231445 ]

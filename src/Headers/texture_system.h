@@ -12,6 +12,7 @@ namespace TextureSystem {
         GLenum format;
         GLenum dataType;
         bool isValid;
+        std::string path;
     };
 
     void Init();
