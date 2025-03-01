@@ -8,5 +8,6 @@ A (somewhat) batched, instanced renderer written in OpenGL. Includes ImGui for e
 
 - [Glitter](https://github.com/Polytonic/Glitter)
 - [Assimp](https://github.com/assimp/assimp)
+- [ImGui](https://github.com/ocornut/imgui)
 - [GLM](https://github.com/g-truc/glm)
 - [Default Texture](https://polyhaven.com/a/rebar_reinforced_concrete)
