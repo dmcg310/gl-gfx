@@ -28,6 +28,14 @@ namespace TransformSystem {
         }
     }
 
+    glm::vec3 GetPosition(const Transform *transform) {
+        if (!transform) {
+            return glm::vec3{};
+        }
+
+        return transform->position;
+    }
+
     void SetRotation(Transform *transform, const glm::vec3 &rotation) {
         if (transform) {
             transform->rotation = rotation;
@@ -40,6 +48,14 @@ namespace TransformSystem {
             transform->scale = scale;
             transform->isDirty = true;
         }
+    }
+
+    glm::vec3 GetScale(const Transform *transform) {
+        if (!transform) {
+            return glm::vec3{};
+        }
+
+        return transform->scale;
     }
 
     const glm::mat4 &GetModelMatrix(Transform *transform) {

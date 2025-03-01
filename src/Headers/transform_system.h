@@ -19,9 +19,13 @@ namespace TransformSystem {
 
     void SetPosition(Transform *transform, const glm::vec3 &position);
 
+    glm::vec3 GetPosition(const Transform *transform);
+
     void SetRotation(Transform *transform, const glm::vec3 &rotation);
 
     void SetScale(Transform *transform, const glm::vec3 &scale);
+
+    glm::vec3 GetScale(const Transform *transform);
 
     const glm::mat4 &GetModelMatrix(Transform *transform);
 

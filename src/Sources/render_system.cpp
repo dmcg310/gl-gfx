@@ -54,8 +54,9 @@ namespace RenderSystem {
 
             const glm::mat4 &viewMatrix = CameraSystem::GetViewMatrix(mainCamera);
             const glm::mat4 &projMatrix = CameraSystem::GetProjectionMatrix(mainCamera);
+            const glm::vec3 &cameraPosition = CameraSystem::GetPosition(mainCamera);
 
-            Renderer::Render(viewMatrix, projMatrix);
+            Renderer::Render(viewMatrix, projMatrix, cameraPosition);
         }
     }
 

@@ -1,6 +1,7 @@
 #include "renderer.h"
 
 #include "backend.h"
+#include "light_system.h"
 
 #include <vector>
 
@@ -47,11 +48,13 @@ namespace Renderer {
         m_batchGroups[batchHash].instances.push_back(instance);
     }
 
-    void Render(const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix) {
+    void Render(const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix, const glm::vec3 &cameraPosition) {
         glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         static const uint32_t maxInstances = 2048;
+
+        const auto &lights = LightSystem::GetAllLights();
 
         for (auto &[_, batch]: m_batchGroups) {
             if (batch.instances.empty()) {
@@ -78,6 +81,25 @@ namespace Renderer {
                 MaterialSystem::SetMat4(batch.material, "view", viewMatrix);
                 MaterialSystem::SetMat4(batch.material, "projection", projectionMatrix);
                 MaterialSystem::SetInt(batch.material, "useInstanceColor", 1);
+                MaterialSystem::SetVec3(batch.material, "viewPos", cameraPosition);
+
+                const int numLights = std::min((int) lights.size(), 8);
+                MaterialSystem::SetInt(batch.material, "numLights", numLights);
+
+                for (int i = 0; i < numLights; i++) {
+                    const auto &light = lights[i];
+                    if (!light->isActive) {
+                        continue;
+                    }
+
+                    std::string prefix = "lights[" + std::to_string(i) + "].";
+                    MaterialSystem::SetInt(batch.material, prefix + "type",
+                                           light->type == LightSystem::LightType::Directional ? 0 : 1);
+                    MaterialSystem::SetVec3(batch.material, prefix + "position", light->position);
+                    MaterialSystem::SetVec3(batch.material, prefix + "direction", light->direction);
+                    MaterialSystem::SetVec3(batch.material, prefix + "color", light->color);
+                    MaterialSystem::SetFloat(batch.material, prefix + "intensity", light->intensity);
+                }
 
                 if (batch.texture) {
                     TextureSystem::Bind(batch.texture, 0);

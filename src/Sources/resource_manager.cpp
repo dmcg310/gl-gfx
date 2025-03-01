@@ -122,7 +122,7 @@ namespace ResourceManager {
         return m_defaultShader;
     }
 
-    MaterialSystem::Material *CreateMaterial(const std::string &name, const std::string &shaderName) {
+    MaterialSystem::Material *CreateMaterial(const std::string &name, const std::string &shaderName, bool useTexture) {
         if (const auto it = m_materials.find(name); it != m_materials.end()) {
             return &it->second;
         }
@@ -137,7 +137,13 @@ namespace ResourceManager {
 
         SetVec3(material, "color", glm::vec3(1.0f));
         SetInt(material, "mainTexture", 0);
-        SetInt(material, "useTexture", 0);
+        SetInt(material, "useTexture", useTexture);
+        SetInt(material, "isEmissive", 0);
+        SetVec3(material, "ambientColor", glm::vec3(0.1f));
+        SetFloat(material, "ambientStrength", 0.1f);
+        SetFloat(material, "diffuseStrength", 0.7f);
+        SetFloat(material, "specularStrength", 0.5f);
+        SetFloat(material, "shininess", 32.0f);
 
         m_materials[name] = *material;
 
@@ -191,7 +197,7 @@ namespace ResourceManager {
     }
 
     MaterialSystem::Material *CreateDefaultMaterial() {
-        return CreateMaterial("default", "default");
+        return CreateMaterial("default", "default", 0);
     }
 
     void ProcessAssimpMesh(const aiScene */*scene*/, const aiMesh *mesh, std::vector<Vertex> &vertices,

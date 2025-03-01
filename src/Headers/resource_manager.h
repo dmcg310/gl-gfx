@@ -26,7 +26,8 @@ namespace ResourceManager {
 
     ShaderSystem::Shader *GetShader(const std::string &name);
 
-    MaterialSystem::Material *CreateMaterial(const std::string &name, const std::string &shaderName);
+    MaterialSystem::Material *CreateMaterial(const std::string &name, const std::string &shaderName,
+                                             bool useTexture = false);
 
     MaterialSystem::Material *GetMaterial(const std::string &name);
 

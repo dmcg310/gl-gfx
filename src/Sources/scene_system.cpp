@@ -1,6 +1,7 @@
 #include "scene_system.h"
 
 #include "renderer.h"
+#include "resource_manager.h"
 
 namespace SceneSystem {
     static std::unordered_map<std::string, Entity> m_entities;
@@ -21,6 +22,30 @@ namespace SceneSystem {
         m_entityPtrs.push_back(&m_entities[name]);
 
         return &m_entities[name];
+    }
+
+    Entity *CreateLightEntity(const LightSystem::Light *light) {
+        if (light->type != LightSystem::LightType::Point) {
+            return nullptr;
+        }
+
+        auto *lightEntity = CreateEntity(light->name + "_visual", glm::vec4(light->color, 1.0f));
+        lightEntity->mesh = ResourceManager::GetDefaultCubeMesh();
+
+        auto *lightMaterial = MaterialSystem::CreateMaterial(light->name + "_material", "default");
+        MaterialSystem::SetVec3(lightMaterial, "color", light->color);
+        MaterialSystem::SetInt(lightMaterial, "useTexture", 0);
+
+        const glm::vec3 emissiveColor = light->color * 2.0f;
+        MaterialSystem::SetVec3(lightMaterial, "color", emissiveColor);
+
+        lightEntity->material = lightMaterial;
+        lightEntity->texture = ResourceManager::GetDefaultTexture();
+
+        TransformSystem::SetScale(lightEntity->transform, glm::vec3(0.2f));
+        TransformSystem::SetPosition(lightEntity->transform, light->position);
+
+        return lightEntity;
     }
 
     Entity *GetEntity(const std::string &name) {

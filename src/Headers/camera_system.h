@@ -49,6 +49,8 @@ namespace CameraSystem {
 
     TransformSystem::Transform *GetTransform(const Camera *camera);
 
+    const glm::vec3 &GetPosition(const Camera *camera);
+
     void SetMainCamera(Camera *camera);
 
     Camera *GetMainCamera();

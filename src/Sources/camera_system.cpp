@@ -146,6 +146,15 @@ namespace CameraSystem {
         return camera ? camera->transform : nullptr;
     }
 
+    const glm::vec3 &GetPosition(const Camera *camera) {
+        if (!camera) {
+            static glm::vec3 defaultPosition(0.0f, 0.0f, 0.0f);
+            return defaultPosition;
+        }
+
+        return camera->position;
+    }
+
     void SetMainCamera(Camera *camera) {
         m_mainCamera = camera;
     }

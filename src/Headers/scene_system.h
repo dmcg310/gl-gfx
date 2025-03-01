@@ -4,6 +4,7 @@
 #include "material_system.h"
 #include "texture_system.h"
 #include "transform_system.h"
+#include "light_system.h"
 
 #include "common.h"
 
@@ -21,6 +22,8 @@ namespace SceneSystem {
     void Init();
 
     Entity *CreateEntity(const std::string &name, const glm::vec4 &color);
+
+    Entity *CreateLightEntity(const LightSystem::Light *light);
 
     Entity *GetEntity(const std::string &name);
 

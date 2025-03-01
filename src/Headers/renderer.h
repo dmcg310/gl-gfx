@@ -28,7 +28,7 @@ namespace Renderer {
     const glm::vec4 &color = glm::vec4(1.0f)
   );
 
-  void Render(const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix);
+  void Render(const glm::mat4 &viewMatrix, const glm::mat4 &projectionMatrix, const glm::vec3 &cameraPosition);
 
   void CleanUp();
 };
