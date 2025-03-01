@@ -30,7 +30,7 @@ namespace RenderSystem {
         CameraSystem::UpdateMainCameraProjection(width, height);
     }
 
-    void Render(float deltaTime) {
+    void Render(const float deltaTime) {
         static float lastWidth = Backend::GetWindowWidth();
         static float lastHeight = Backend::GetWindowHeight();
         const float currentWidth = Backend::GetWindowWidth();

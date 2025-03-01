@@ -195,98 +195,195 @@ namespace Ui {
 
             ImGui::Separator();
 
-            static char sceneNameBuffer[128] = "";
-            if (ImGui::Button("Use Current Name")) {
-                strncpy_s(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
-                sceneNameBuffer[sizeof(sceneNameBuffer) - 1] = '\0';
-            }
-            ImGui::SameLine();
-            ImGui::InputText("Scene Name", sceneNameBuffer, IM_ARRAYSIZE(sceneNameBuffer));
-
-            static char filenameBuffer[128] = "";
-            if (ImGui::Button("Use Scene Name")) {
-                strncpy_s(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
-                filenameBuffer[sizeof(filenameBuffer) - 1] = '\0';
-            }
-            ImGui::SameLine();
-            ImGui::InputText("Filename", filenameBuffer, IM_ARRAYSIZE(filenameBuffer));
-            if (ImGui::IsItemHovered()) {
-                ImGui::SetTooltip("File will be saved to the scenes directory");
-            }
-
-            static bool showSaveConfirmation = false;
-            if (ImGui::Button("Save Scene") && !showSaveConfirmation) {
-                if (strlen(sceneNameBuffer) > 0 && strlen(filenameBuffer) > 0) {
-                    showSaveConfirmation = true;
-                } else {
-                    ImGui::OpenPopup("Save Error");
-                }
-            }
-
-            if (ImGui::BeginPopupModal("Save Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-                ImGui::Text("Scene name and filename cannot be empty!");
-                ImGui::Separator();
-
-                if (ImGui::Button("OK", ImVec2(120, 0))) {
-                    ImGui::CloseCurrentPopup();
-                }
-
-                ImGui::EndPopup();
-            }
-
-            if (showSaveConfirmation) {
-                ImGui::OpenPopup("Save Scene?");
-            }
-
-            if (ImGui::BeginPopupModal("Save Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-                ImGui::Text("Are you sure you want to save the scene?");
-                ImGui::Text("Scene Name: %s", sceneNameBuffer);
-                ImGui::Text("Filename: %s", filenameBuffer);
-                ImGui::Separator();
-
-                if (ImGui::Button("Save", ImVec2(120, 0))) {
-                    SceneSystem::SetSceneName(sceneNameBuffer);
-
-                    if (Serialisation::Serialise(filenameBuffer, sceneNameBuffer)) {
-                        ImGui::CloseCurrentPopup();
-                        showSaveConfirmation = false;
-
-                        ImGui::OpenPopup("Save Success");
-                    } else {
-                        ImGui::OpenPopup("Save Failed");
-                    }
+            // saving
+            if (ImGui::TreeNodeEx("Save Scene", ImGuiTreeNodeFlags_DefaultOpen)) {
+                static char sceneNameBuffer[128] = "";
+                if (ImGui::Button("Use Current Name")) {
+                    strncpy_s(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
+                    sceneNameBuffer[sizeof(sceneNameBuffer) - 1] = '\0';
                 }
 
                 ImGui::SameLine();
-
-                if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-                    ImGui::CloseCurrentPopup();
-                    showSaveConfirmation = false;
+                ImGui::InputText("Scene Name", sceneNameBuffer, IM_ARRAYSIZE(sceneNameBuffer));
+                static char filenameBuffer[128] = "";
+                if (ImGui::Button("Use Scene Name")) {
+                    strncpy_s(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
+                    filenameBuffer[sizeof(filenameBuffer) - 1] = '\0';
                 }
 
-                ImGui::EndPopup();
+                ImGui::SameLine();
+                ImGui::InputText("Filename", filenameBuffer, IM_ARRAYSIZE(filenameBuffer));
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("File will be saved to the scenes directory");
+                }
+
+                static bool showSaveConfirmation = false;
+                if (ImGui::Button("Save Scene") && !showSaveConfirmation) {
+                    if (strlen(sceneNameBuffer) > 0 && strlen(filenameBuffer) > 0) {
+                        showSaveConfirmation = true;
+                    } else {
+                        ImGui::OpenPopup("Save Error");
+                    }
+                }
+
+                if (ImGui::BeginPopupModal("Save Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Scene name and filename cannot be empty!");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (showSaveConfirmation) {
+                    ImGui::OpenPopup("Save Scene?");
+                }
+
+                if (ImGui::BeginPopupModal("Save Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Are you sure you want to save the scene?");
+                    ImGui::Text("Scene Name: %s", sceneNameBuffer);
+                    ImGui::Text("Filename: %s", filenameBuffer);
+                    ImGui::Separator();
+
+                    if (ImGui::Button("Save", ImVec2(120, 0))) {
+                        SceneSystem::SetSceneName(sceneNameBuffer);
+
+                        if (Serialisation::Serialise(filenameBuffer, sceneNameBuffer)) {
+                            ImGui::CloseCurrentPopup();
+                            showSaveConfirmation = false;
+
+                            sceneNameBuffer[0] = '\0';
+                            filenameBuffer[0] = '\0';
+
+                            ImGui::OpenPopup("Save Success");
+                        } else {
+                            ImGui::OpenPopup("Save Failed");
+                        }
+                    }
+
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                        showSaveConfirmation = false;
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (ImGui::BeginPopupModal("Save Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Scene saved successfully!");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (ImGui::BeginPopupModal("Save Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Failed to save scene!");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                ImGui::TreePop();
             }
 
-            if (ImGui::BeginPopupModal("Save Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-                ImGui::Text("Scene saved successfully!");
-                ImGui::Separator();
+            ImGui::Separator();
 
-                if (ImGui::Button("OK", ImVec2(120, 0))) {
-                    ImGui::CloseCurrentPopup();
+            // loading
+            if (ImGui::TreeNodeEx("Load Scene", ImGuiTreeNodeFlags_DefaultOpen)) {
+                static char loadFilenameBuffer[128] = "";
+                ImGui::InputText("Filename to Load", loadFilenameBuffer, IM_ARRAYSIZE(loadFilenameBuffer));
+                if (ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("Enter the scene file to load (from scenes directory)");
                 }
 
-                ImGui::EndPopup();
-            }
-
-            if (ImGui::BeginPopupModal("Save Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-                ImGui::Text("Failed to save scene!");
-                ImGui::Separator();
-
-                if (ImGui::Button("OK", ImVec2(120, 0))) {
-                    ImGui::CloseCurrentPopup();
+                static bool showLoadConfirmation = false;
+                if (ImGui::Button("Load Scene") && !showLoadConfirmation) {
+                    if (strlen(loadFilenameBuffer) > 0) {
+                        showLoadConfirmation = true;
+                    } else {
+                        ImGui::OpenPopup("Load Error");
+                    }
                 }
 
-                ImGui::EndPopup();
+                if (ImGui::BeginPopupModal("Load Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Filename cannot be empty!");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (showLoadConfirmation) {
+                    ImGui::OpenPopup("Load Scene?");
+                }
+
+                if (ImGui::BeginPopupModal("Load Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Are you sure you want to load the scene?");
+                    ImGui::Text("All unsaved changes to the current scene will be lost.");
+                    ImGui::Text("Filename: %s", loadFilenameBuffer);
+                    ImGui::Separator();
+
+                    if (ImGui::Button("Load", ImVec2(120, 0))) {
+                        if (Serialisation::Deserialise(loadFilenameBuffer)) {
+                            ImGui::CloseCurrentPopup();
+                            showLoadConfirmation = false;
+                            loadFilenameBuffer[0] = '\0';
+
+                            ImGui::OpenPopup("Load Success");
+                        } else {
+                            ImGui::OpenPopup("Load Failed");
+                        }
+                    }
+
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                        showLoadConfirmation = false;
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (ImGui::BeginPopupModal("Load Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Scene loaded successfully!");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                if (ImGui::BeginPopupModal("Load Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    ImGui::Text("Failed to load scene!");
+                    ImGui::Text("Check if the file exists in the scenes directory.");
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK", ImVec2(120, 0))) {
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    ImGui::EndPopup();
+                }
+
+                ImGui::TreePop();
             }
         }
     }

@@ -42,8 +42,6 @@ namespace App {
             Backend::EndFrame();
         }
 
-        // Serialisation::Serialise("demo", "demo");
-
         SceneSystem::CleanUp();
         RenderSystem::CleanUp();
         ResourceManager::CleanUp();
