@@ -1,6 +1,8 @@
 .cache/
 
 [Bb]uild/
+[Bb]uild-debug/
+[Bb]uild-rel/
 
 compile_commands.json
 
