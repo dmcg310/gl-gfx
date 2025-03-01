@@ -5,6 +5,7 @@
 #include "resource_manager.h"
 #include "scene_system.h"
 #include "light_system.h"
+#include "serialisation.h"
 
 #include <chrono>
 
@@ -46,6 +47,8 @@ namespace App {
 
         float lastTime = Backend::GetWindowTime();
         float deltaTime = 0.0f;
+
+        Serialisation::Serialise("asdf.toml", "asdf");
 
         while (Backend::WindowIsOpen()) {
             const float currentTime = Backend::GetWindowTime();

@@ -43,6 +43,14 @@ namespace TransformSystem {
         }
     }
 
+    glm::vec3 GetRotation(const Transform *transform) {
+        if (!transform) {
+            return glm::vec3{};
+        }
+
+        return transform->rotation;
+    }
+
     void SetScale(Transform *transform, const glm::vec3 &scale) {
         if (transform) {
             transform->scale = scale;

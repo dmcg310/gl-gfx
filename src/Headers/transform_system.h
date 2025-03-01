@@ -23,6 +23,8 @@ namespace TransformSystem {
 
     void SetRotation(Transform *transform, const glm::vec3 &rotation);
 
+    glm::vec3 GetRotation(const Transform *transform);
+
     void SetScale(Transform *transform, const glm::vec3 &scale);
 
     glm::vec3 GetScale(const Transform *transform);
