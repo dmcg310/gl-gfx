@@ -4,6 +4,7 @@
 #include "resource_manager.h"
 
 namespace SceneSystem {
+    static std::string m_name;
     static std::unordered_map<std::string, Entity> m_entities;
     static std::vector<Entity *> m_entityPtrs;
 
@@ -67,6 +68,14 @@ namespace SceneSystem {
 
             m_entities.erase(it);
         }
+    }
+
+    void SetSceneName(const std::string &name) {
+        m_name = name;
+    }
+
+    std::string GetSceneName() {
+        return m_name;
     }
 
     void Update() {

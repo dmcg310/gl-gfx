@@ -18,6 +18,7 @@ namespace MaterialSystem {
 
         Type type;
         std::any value;
+        bool persistent = true;
     };
 
     struct Material {
@@ -32,17 +33,17 @@ namespace MaterialSystem {
 
     Material *GetMaterial(const std::string &name);
 
-    void SetFloat(Material *material, const std::string &name, float value);
+    void SetFloat(Material *material, const std::string &name, float value, bool persistent = true);
 
-    void SetInt(Material *material, const std::string &name, int value);
+    void SetInt(Material *material, const std::string &name, int value, bool persistent = true);
 
-    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value);
+    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value, bool persistent = true);
 
-    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value);
+    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value, bool persistent = true);
 
-    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value);
+    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value, bool persistent = true);
 
-    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value);
+    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value, bool persistent = true);
 
     void Bind(const Material *material);
 

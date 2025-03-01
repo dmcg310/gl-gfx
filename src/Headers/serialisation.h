@@ -1,7 +1,8 @@
 #pragma once
 
-
 #include "common.h"
+
+#include "scene_system.h"
 
 #include <toml++/toml.hpp>
 #include <filesystem>
@@ -11,7 +12,23 @@ namespace Serialisation {
 
     bool Deserialise(const std::string &filename);
 
-    void Default();
+    bool DeserialiseCamera(const toml::table &scene);
+
+    bool DeserialiseEntities(const toml::table &scene);
+
+    void DeserialiseLights(const toml::table &scene);
+
+    void DeserialiseTransform(const SceneSystem::Entity *entity, const toml::table &transformTable);
+
+    void DeserialiseMesh(const SceneSystem::Entity *entity, const toml::table &meshTable);
+
+    void DeserialiseTexture(const SceneSystem::Entity *entity, const toml::table &textureTable);
+
+    void DeserialiseMaterial(const SceneSystem::Entity *entity, const toml::table &materialTable);
+
+    void DeserialiseMaterialProperties(MaterialSystem::Material *material, const toml::table &propertiesTable);
+
+    toml::table Read(const std::string &filename);
 
     bool Write(const toml::table &data, const std::string &filename);
 
@@ -43,7 +60,7 @@ namespace Serialisation {
             return glm::vec2(0.0f);
         }
 
-        return glm::vec2{
+        return {
             arr[0].value_or(0.0f),
             arr[1].value_or(0.0f)
         };
@@ -54,11 +71,11 @@ namespace Serialisation {
             return glm::vec3(0.0f);
         }
 
-        return glm::vec3(
+        return {
             arr[0].value_or(0.0f),
             arr[1].value_or(0.0f),
             arr[2].value_or(0.0f)
-        );
+        };
     }
 
     inline glm::vec4 ToVec4(const toml::array &arr) {
@@ -66,12 +83,12 @@ namespace Serialisation {
             return glm::vec4(1.0f);
         }
 
-        return glm::vec4(
+        return {
             arr[0].value_or(1.0f),
             arr[1].value_or(1.0f),
             arr[2].value_or(1.0f),
             arr[3].value_or(1.0f)
-        );
+        };
     }
 
     inline std::string EnsureTomlExtension(const std::string &filename) {

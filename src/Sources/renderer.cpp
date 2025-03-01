@@ -78,13 +78,13 @@ namespace Renderer {
                 MeshSystem::UpdateInstanceData(batch.mesh, currentBatchInstances);
 
                 MaterialSystem::Bind(batch.material);
-                MaterialSystem::SetMat4(batch.material, "view", viewMatrix);
-                MaterialSystem::SetMat4(batch.material, "projection", projectionMatrix);
-                MaterialSystem::SetInt(batch.material, "useInstanceColor", 1);
-                MaterialSystem::SetVec3(batch.material, "viewPos", cameraPosition);
+                MaterialSystem::SetMat4(batch.material, "view", viewMatrix, false);
+                MaterialSystem::SetMat4(batch.material, "projection", projectionMatrix, false);
+                MaterialSystem::SetInt(batch.material, "useInstanceColor", 1, false);
+                MaterialSystem::SetVec3(batch.material, "viewPos", cameraPosition, false);
 
-                const int numLights = std::min((int) lights.size(), 8);
-                MaterialSystem::SetInt(batch.material, "numLights", numLights);
+                const int numLights = std::min(static_cast<int>(lights.size()), 8);
+                MaterialSystem::SetInt(batch.material, "numLights", numLights, false);
 
                 for (int i = 0; i < numLights; i++) {
                     const auto &light = lights[i];
@@ -94,11 +94,11 @@ namespace Renderer {
 
                     std::string prefix = "lights[" + std::to_string(i) + "].";
                     MaterialSystem::SetInt(batch.material, prefix + "type",
-                                           light->type == LightSystem::LightType::Directional ? 0 : 1);
-                    MaterialSystem::SetVec3(batch.material, prefix + "position", light->position);
-                    MaterialSystem::SetVec3(batch.material, prefix + "direction", light->direction);
-                    MaterialSystem::SetVec3(batch.material, prefix + "color", light->color);
-                    MaterialSystem::SetFloat(batch.material, prefix + "intensity", light->intensity);
+                                           light->type == LightSystem::LightType::Directional ? 0 : 1, false);
+                    MaterialSystem::SetVec3(batch.material, prefix + "position", light->position, false);
+                    MaterialSystem::SetVec3(batch.material, prefix + "direction", light->direction, false);
+                    MaterialSystem::SetVec3(batch.material, prefix + "color", light->color, false);
+                    MaterialSystem::SetFloat(batch.material, prefix + "intensity", light->intensity, false);
                 }
 
                 if (batch.texture) {

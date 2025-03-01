@@ -41,13 +41,15 @@ namespace ResourceManager {
             return m_defaultCubeMesh;
         }
 
-        const MeshSystem::Mesh *mesh = MeshSystem::CreateMesh(name, vertices, indices);
+        MeshSystem::Mesh *mesh = MeshSystem::CreateMesh(name, vertices, indices);
         if (!mesh) {
             ErrorHandler::Warn("Failed to create mesh: " + name + ". Using default cube.", __FILE__, __func__,
                                __LINE__);
 
             return m_defaultCubeMesh;
         }
+
+        mesh->path = filePath;
 
         m_meshes[name] = *mesh;
 

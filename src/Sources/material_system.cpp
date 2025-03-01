@@ -34,28 +34,28 @@ namespace MaterialSystem {
         return nullptr;
     }
 
-    void SetFloat(Material *material, const std::string &name, float value) {
-        material->properties[name] = Property{Property::Type::Float, value};
+    void SetFloat(Material *material, const std::string &name, float value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Float, value, persistent};
     }
 
-    void SetInt(Material *material, const std::string &name, int value) {
-        material->properties[name] = Property{Property::Type::Int, value};
+    void SetInt(Material *material, const std::string &name, int value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Int, value, persistent};
     }
 
-    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value) {
-        material->properties[name] = Property{Property::Type::Vec2, value};
+    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Vec2, value, persistent};
     }
 
-    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value) {
-        material->properties[name] = Property{Property::Type::Vec3, value};
+    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Vec3, value, persistent};
     }
 
-    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value) {
-        material->properties[name] = Property{Property::Type::Vec4, value};
+    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Vec4, value, persistent};
     }
 
-    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value) {
-        material->properties[name] = Property{Property::Type::Mat4, value};
+    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value, const bool persistent) {
+        material->properties[name] = Property{Property::Type::Mat4, value, persistent};
     }
 
     void Bind(const Material *material) {

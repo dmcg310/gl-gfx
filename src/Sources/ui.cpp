@@ -5,10 +5,12 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
 #include "backend.h"
 #include "cursor_manager.h"
 #include "scene_system.h"
 #include "resource_manager.h"
+#include "serialisation.h"
 
 namespace Ui {
     static float ambientStrength = 0.1f;
@@ -186,6 +188,109 @@ namespace Ui {
         }
     }
 
+    static void RenderSceneManagementPanel() {
+        if (ImGui::CollapsingHeader("Scene Management", ImGuiTreeNodeFlags_DefaultOpen)) {
+            const std::string currentSceneName = SceneSystem::GetSceneName();
+            ImGui::Text("Current Scene: %s", currentSceneName.empty() ? "Unnamed Scene" : currentSceneName.c_str());
+
+            ImGui::Separator();
+
+            static char sceneNameBuffer[128] = "";
+            if (ImGui::Button("Use Current Name")) {
+                strncpy_s(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
+                sceneNameBuffer[sizeof(sceneNameBuffer) - 1] = '\0';
+            }
+            ImGui::SameLine();
+            ImGui::InputText("Scene Name", sceneNameBuffer, IM_ARRAYSIZE(sceneNameBuffer));
+
+            static char filenameBuffer[128] = "";
+            if (ImGui::Button("Use Scene Name")) {
+                strncpy_s(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
+                filenameBuffer[sizeof(filenameBuffer) - 1] = '\0';
+            }
+            ImGui::SameLine();
+            ImGui::InputText("Filename", filenameBuffer, IM_ARRAYSIZE(filenameBuffer));
+            if (ImGui::IsItemHovered()) {
+                ImGui::SetTooltip("File will be saved to the scenes directory");
+            }
+
+            static bool showSaveConfirmation = false;
+            if (ImGui::Button("Save Scene") && !showSaveConfirmation) {
+                if (strlen(sceneNameBuffer) > 0 && strlen(filenameBuffer) > 0) {
+                    showSaveConfirmation = true;
+                } else {
+                    ImGui::OpenPopup("Save Error");
+                }
+            }
+
+            if (ImGui::BeginPopupModal("Save Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Scene name and filename cannot be empty!");
+                ImGui::Separator();
+
+                if (ImGui::Button("OK", ImVec2(120, 0))) {
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+
+            if (showSaveConfirmation) {
+                ImGui::OpenPopup("Save Scene?");
+            }
+
+            if (ImGui::BeginPopupModal("Save Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Are you sure you want to save the scene?");
+                ImGui::Text("Scene Name: %s", sceneNameBuffer);
+                ImGui::Text("Filename: %s", filenameBuffer);
+                ImGui::Separator();
+
+                if (ImGui::Button("Save", ImVec2(120, 0))) {
+                    SceneSystem::SetSceneName(sceneNameBuffer);
+
+                    if (Serialisation::Serialise(filenameBuffer, sceneNameBuffer)) {
+                        ImGui::CloseCurrentPopup();
+                        showSaveConfirmation = false;
+
+                        ImGui::OpenPopup("Save Success");
+                    } else {
+                        ImGui::OpenPopup("Save Failed");
+                    }
+                }
+
+                ImGui::SameLine();
+
+                if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                    ImGui::CloseCurrentPopup();
+                    showSaveConfirmation = false;
+                }
+
+                ImGui::EndPopup();
+            }
+
+            if (ImGui::BeginPopupModal("Save Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Scene saved successfully!");
+                ImGui::Separator();
+
+                if (ImGui::Button("OK", ImVec2(120, 0))) {
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+
+            if (ImGui::BeginPopupModal("Save Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Failed to save scene!");
+                ImGui::Separator();
+
+                if (ImGui::Button("OK", ImVec2(120, 0))) {
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+        }
+    }
+
     static void RenderMainPanel() {
         if (firstTime) {
             ImGui::SetNextWindowPos(windowPos);
@@ -198,6 +303,7 @@ namespace Ui {
         RenderVisualSettingsSection();
         RenderEntityControlsSection();
         RenderMaterialPropertiesSection();
+        RenderSceneManagementPanel();
 
         if (ImGui::IsWindowAppearing()) {
             windowPos = ImGui::GetWindowPos();

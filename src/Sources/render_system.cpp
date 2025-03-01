@@ -6,13 +6,6 @@
 namespace RenderSystem {
     void Init() {
         Renderer::Init();
-
-        if (!CameraSystem::GetMainCamera()) {
-            CameraSystem::Camera *camera = CameraSystem::CreateCamera("main");
-            CameraSystem::SetMainCamera(camera);
-
-            UpdateProjection();
-        }
     }
 
     void SetMainCamera(CameraSystem::Camera *camera) {

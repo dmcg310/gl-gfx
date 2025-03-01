@@ -1,21 +1,12 @@
-scene_name = 'asdf'
+scene_name = 'demo'
 
 [camera]
-aspect_ratio = 1.7777777910232544
-far_plane = 100.0
-fov = 45.0
-front = [ 0.0, 0.0, -1.0 ]
 name = 'main'
-near_plane = 0.10000000149011612
-pitch = 0.0
 position = [ 0.0, 0.5, 3.0 ]
-up = [ 0.0, 0.25, 0.0 ]
-yaw = -90.0
+up = [ 0.0, 1.0, 0.0 ]
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'pointLight_visual'
 
     [entity.material]
@@ -27,12 +18,14 @@ name = 'pointLight_visual'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'default'
     path = '../Assets/Textures/default.png'
 
@@ -43,8 +36,6 @@ name = 'pointLight_visual'
 
 [[entity]]
 color = [ 0.5, 0.5, 0.5, 0.5 ]
-is_active = true
-mesh = 'plane'
 name = 'floor'
 
     [entity.material]
@@ -63,12 +54,14 @@ name = 'floor'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'plane'
+    path = '../Assets/Models/plane.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'default'
     path = '../Assets/Textures/default.png'
 
@@ -79,8 +72,6 @@ name = 'floor'
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'cube1'
 
     [entity.material]
@@ -99,12 +90,14 @@ name = 'cube1'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'container'
     path = '../Assets/Textures/container.png'
 
@@ -115,8 +108,6 @@ name = 'cube1'
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'cube2'
 
     [entity.material]
@@ -135,12 +126,14 @@ name = 'cube2'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'container'
     path = '../Assets/Textures/container.png'
 
@@ -151,8 +144,6 @@ name = 'cube2'
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'cube3'
 
     [entity.material]
@@ -171,12 +162,14 @@ name = 'cube3'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'container'
     path = '../Assets/Textures/container.png'
 
@@ -187,8 +180,6 @@ name = 'cube3'
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'cube4'
 
     [entity.material]
@@ -207,12 +198,14 @@ name = 'cube4'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'container'
     path = '../Assets/Textures/container.png'
 
@@ -223,8 +216,6 @@ name = 'cube4'
 
 [[entity]]
 color = [ 1.0, 1.0, 1.0, 1.0 ]
-is_active = true
-mesh = 'cube'
 name = 'cube5'
 
     [entity.material]
@@ -243,12 +234,14 @@ name = 'cube5'
 
         [entity.material.shader]
         fragment_path = '../src/Shaders/default.frag'
-        is_valid = true
         name = 'default'
         vertex_path = '../src/Shaders/default.vert'
 
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
     [entity.texture]
-    is_valid = true
     name = 'container'
     path = '../Assets/Textures/container.png'
 
@@ -260,7 +253,6 @@ name = 'cube5'
 [[light]]
 color = [ 1.0, 1.0, 1.0 ]
 intensity = 3.0
-is_active = true
 name = 'pointLight'
 position = [ 0.0, 2.0, 0.0 ]
 type = 'point'

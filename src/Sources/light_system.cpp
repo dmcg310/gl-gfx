@@ -13,7 +13,7 @@ namespace LightSystem {
     }
 
     Light *CreateDirectionalLight(const std::string &name, const glm::vec3 &direction, const glm::vec3 &color,
-                                  float intensity) {
+                                  const float intensity) {
         Light light;
         light.name = name;
         light.type = LightType::Directional;

@@ -11,9 +11,9 @@
 namespace SceneSystem {
     struct Entity {
         std::string name;
-        MeshSystem::Mesh *mesh = nullptr;
-        MaterialSystem::Material *material = nullptr;
-        TextureSystem::Texture *texture = nullptr;
+        mutable MeshSystem::Mesh *mesh = nullptr;
+        mutable MaterialSystem::Material *material = nullptr;
+        mutable TextureSystem::Texture *texture = nullptr;
         TransformSystem::Transform *transform = nullptr;
         bool isActive = true;
         glm::vec4 color = glm::vec4(1.0f);
@@ -30,6 +30,10 @@ namespace SceneSystem {
     const std::vector<Entity *> &GetAllEntities();
 
     void DestroyEntity(const std::string &name);
+
+    void SetSceneName(const std::string &name);
+
+    std::string GetSceneName();
 
     void Update();
 

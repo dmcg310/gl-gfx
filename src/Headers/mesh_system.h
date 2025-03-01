@@ -19,6 +19,7 @@ namespace MeshSystem {
         bool isInstanced;
         glm::vec3 minBounds;
         glm::vec3 maxBounds;
+        std::string path;
     };
 
     void Init();
