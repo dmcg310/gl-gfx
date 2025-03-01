@@ -7,7 +7,7 @@
 
 namespace Renderer {
     static std::unordered_map<size_t, BatchGroup> m_batchGroups;
-    static auto m_clearColor = glm::vec4(0.05f, 0.05f, 0.1f, 1.0f);
+    static auto m_clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     static size_t ComputeBatchHash(MeshSystem::Mesh *mesh, MaterialSystem::Material *material,
                                    TextureSystem::Texture *texture) {

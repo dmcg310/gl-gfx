@@ -14,7 +14,7 @@ namespace Ui {
     static float ambientStrength = 0.1f;
     static float diffuseStrength = 0.7f;
     static float specularStrength = 0.5f;
-    static float shininess = 32.0f;
+    static float shininess = 50.0f;
     static int selectedEntityIndex = -1;
     static bool firstTime = true;
     static ImVec2 windowPos(20, 20);

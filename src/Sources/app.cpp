@@ -18,9 +18,9 @@ namespace App {
 
         SceneSystem::CreateLightEntity(LightSystem::CreatePointLight(
             "pointLight",
-            glm::vec3(3.0f, 2.0f, 0.0f),
+            glm::vec3(0.0f, 2.0f, 0.0f),
             glm::vec3(1.0f, 1.0f, 1.0f),
-            1.5f
+            3.0f
         ));
 
         auto *floor = SceneSystem::CreateEntity("floor", glm::vec4(0.5f));
