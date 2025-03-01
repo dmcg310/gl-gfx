@@ -56,7 +56,8 @@ include_directories(src/Headers/
         src/Vendor/glm/
         src/Vendor/stb/
         ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/
-        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/backends/)
+        ${CMAKE_SOURCE_DIR}/src/Vendor/imgui/backends/
+        src/Vendor/tomlplusplus/include/)
 
 file(GLOB VENDORS_SOURCES src/Vendor/glad/src/glad.c)
 file(GLOB PROJECT_HEADERS src/Headers/*.hpp)
