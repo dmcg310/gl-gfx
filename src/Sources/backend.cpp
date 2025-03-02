@@ -71,7 +71,7 @@ namespace Backend {
         glfwSetWindowFocusCallback(m_window, window_focus_callback);
 
         glfwMakeContextCurrent(m_window);
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__,

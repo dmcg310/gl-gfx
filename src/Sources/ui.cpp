@@ -501,15 +501,10 @@ namespace Ui {
         ImGui::NewFrame();
 
         ImGuiIO &io = ImGui::GetIO();
-// apparently we are outside the bounds of an array here but the code
-// seems to work
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warray-bounds"
         // don't handle tab
         io.KeysData[ImGuiKey_Tab].Down = false;
         io.KeysData[ImGuiKey_Tab].DownDuration = -1.0f;
         io.KeysData[ImGuiKey_Tab].DownDurationPrev = -1.0f;
-#pragma clang diagnostic pop
 
         if (CursorManager::IsInCameraMode()) {
             static ImVec2 lastMousePos = io.MousePos;
