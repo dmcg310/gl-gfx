@@ -30,10 +30,12 @@ namespace SceneSystem {
             return nullptr;
         }
 
-        auto *lightEntity = CreateEntity(light->name + "_visual", glm::vec4(light->color, 1.0f));
+        auto *lightEntity =
+            CreateEntity(light->name + "_visual", glm::vec4(light->color, 1.0f));
         lightEntity->mesh = ResourceManager::GetDefaultCubeMesh();
 
-        auto *lightMaterial = MaterialSystem::CreateMaterial(light->name + "_material", "default");
+        auto *lightMaterial =
+            MaterialSystem::CreateMaterial(light->name + "_material", "default");
         MaterialSystem::SetVec3(lightMaterial, "color", light->color);
         MaterialSystem::SetInt(lightMaterial, "useTexture", 0);
 
@@ -61,8 +63,8 @@ namespace SceneSystem {
     void DestroyEntity(const std::string &name) {
         const auto it = m_entities.find(name);
         if (it != m_entities.end()) {
-            if (const auto vecIt =
-                    std::ranges::find(m_entityPtrs, &it->second); vecIt != m_entityPtrs.end()) {
+            if (const auto vecIt = std::ranges::find(m_entityPtrs, &it->second);
+                vecIt != m_entityPtrs.end()) {
                 m_entityPtrs.erase(vecIt);
             }
 
@@ -79,15 +81,11 @@ namespace SceneSystem {
     }
 
     void Update() {
-        for (const auto *entity: m_entityPtrs) {
+        for (const auto *entity : m_entityPtrs) {
             if (entity->isActive) {
                 Renderer::SubmitInstanced(
-                    entity->mesh,
-                    entity->material,
-                    entity->texture,
-                    TransformSystem::GetModelMatrix(entity->transform),
-                    entity->color
-                );
+                    entity->mesh, entity->material, entity->texture,
+                    TransformSystem::GetModelMatrix(entity->transform), entity->color);
             }
         }
     }

@@ -3,37 +3,37 @@
 #include "common.h"
 
 namespace Backend {
-	void Init();
+    void Init();
 
-	void BeginFrame();
+    void BeginFrame();
 
-	void Update();
+    void Update();
 
-	void PrepareUi();
+    void PrepareUi();
 
-	void RenderUi();
+    void RenderUi();
 
-	void EndFrame();
+    void EndFrame();
 
-	void CleanUp();
+    void CleanUp();
 
-	GLFWwindow *GetWindowHandle();
+    GLFWwindow *GetWindowHandle();
 
-	void CreateGLFWWindow(const WindowedMode &windowedMode);
+    void CreateGLFWWindow(const WindowedMode &windowedMode);
 
-	void SetWindowedMode(const WindowedMode &windowedMode);
+    void SetWindowedMode(const WindowedMode &windowedMode);
 
-	void ToggleFullscreen();
+    void ToggleFullscreen();
 
-	void ForceCloseWindow();
+    void ForceCloseWindow();
 
-	bool WindowIsOpen();
+    bool WindowIsOpen();
 
-	bool WindowIsMinimized();
+    bool WindowIsMinimized();
 
-	float GetWindowWidth();
+    float GetWindowWidth();
 
-	float GetWindowHeight();
+    float GetWindowHeight();
 
-	float GetWindowTime();
+    float GetWindowTime();
 }

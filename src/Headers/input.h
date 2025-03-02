@@ -1,44 +1,55 @@
 #pragma once
 
-#include "common.h"
 #include "keycodes.h"
 
 namespace Input {
-	void Init();
-	void Update();
+    void Init();
 
-	bool KeyPressed(unsigned int keycode);
-	bool KeyDown(unsigned int keycode);
+    void Update();
 
-	float GetMouseOffsetX();
-	float GetMouseOffsetY();
+    bool KeyPressed(unsigned int keycode);
 
-	bool LeftMouseDown();
-	bool RightMouseDown();
+    bool KeyDown(unsigned int keycode);
 
-	bool LeftMousePressed();
-	bool RightMousePressed();
+    float GetMouseOffsetX();
 
-	bool MouseWheelUp();
-	bool MouseWheelDown();
+    float GetMouseOffsetY();
 
-	int GetMouseWheelValue();
+    bool LeftMouseDown();
 
-	int GetMouseX();
-	int GetMouseY();
+    bool RightMouseDown();
 
-	void PreventRightMouseHold();
+    bool LeftMousePressed();
 
-	int GetScrollWheelYOffset();
-	void ResetScrollWheelYOffset();
+    bool RightMousePressed();
 
-	void DisableCursor();
-	void HideCursor();
-	void ShowCursor();
+    bool MouseWheelUp();
 
-	int GetCursorScreenX();
-	int GetCursorScreenY();
+    bool MouseWheelDown();
 
-	int GetViewportMappedMouseX(int viewportWidth);
-	int GetViewportMappedMouseY(int viewportHeight);
+    int GetMouseWheelValue();
+
+    int GetMouseX();
+
+    int GetMouseY();
+
+    void PreventRightMouseHold();
+
+    int GetScrollWheelYOffset();
+
+    void ResetScrollWheelYOffset();
+
+    void DisableCursor();
+
+    void HideCursor();
+
+    void ShowCursor();
+
+    int GetCursorScreenX();
+
+    int GetCursorScreenY();
+
+    int GetViewportMappedMouseX(int viewportWidth);
+
+    int GetViewportMappedMouseY(int viewportHeight);
 }

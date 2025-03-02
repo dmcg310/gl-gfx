@@ -1,11 +1,11 @@
 #include "serialisation.h"
 
+#include "camera_system.h"
+#include "light_system.h"
 #include "render_system.h"
 #include "resource_manager.h"
-#include "camera_system.h"
 #include "scene_system.h"
 #include "transform_system.h"
-#include "light_system.h"
 
 namespace Serialisation {
     bool Serialise(const std::string &filename, const std::string &sceneName) {
@@ -21,7 +21,7 @@ namespace Serialisation {
         scene.insert("camera", camera);
 
         toml::array entities;
-        for (const auto *entity: SceneSystem::GetAllEntities()) {
+        for (const auto *entity : SceneSystem::GetAllEntities()) {
             toml::table entityTable;
             entityTable.insert("name", entity->name);
             entityTable.insert("color", ToTomlArray(entity->color));
@@ -67,7 +67,7 @@ namespace Serialisation {
                 }
 
                 toml::table properties;
-                for (const auto &[name, prop]: entity->material->properties) {
+                for (const auto &[name, prop] : entity->material->properties) {
                     if (!prop.persistent) {
                         continue;
                     }
@@ -100,7 +100,8 @@ namespace Serialisation {
                             break;
                         }
                         default:
-                            ErrorHandler::Warn("Unknown property type", __FILE__, __func__, __LINE__);
+                            ErrorHandler::Warn("Unknown property type", __FILE__,
+                                               __func__, __LINE__);
                     }
                 }
 
@@ -114,10 +115,12 @@ namespace Serialisation {
         scene.insert("entity", entities);
 
         toml::array lights;
-        for (const auto *light: LightSystem::GetAllLights()) {
+        for (const auto *light : LightSystem::GetAllLights()) {
             toml::table lightTable;
             lightTable.insert("name", light->name);
-            lightTable.insert("type", light->type == LightSystem::LightType::Directional ? "directional" : "point");
+            lightTable.insert("type", light->type == LightSystem::LightType::Directional
+                                          ? "directional"
+                                          : "point");
             lightTable.insert("position", ToTomlArray(light->position));
             if (light->type == LightSystem::LightType::Directional) {
                 lightTable.insert("directional", ToTomlArray(light->direction));
@@ -135,14 +138,16 @@ namespace Serialisation {
     bool Deserialise(const std::string &filename) {
         auto scene = Read(filename);
         if (scene.empty()) {
-            ErrorHandler::Warn("Failed to load scene: " + filename, __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Failed to load scene: " + filename, __FILE__, __func__,
+                               __LINE__);
             return false;
         }
 
         SceneSystem::CleanUp();
 
         if (scene.contains("scene_name") && scene["scene_name"].is_string()) {
-            const std::string sceneName = scene["scene_name"].as_string()->value_or("Unnamed Scene");
+            const std::string sceneName =
+                scene["scene_name"].as_string()->value_or("Unnamed Scene");
             SceneSystem::SetSceneName(sceneName);
         }
 
@@ -175,7 +180,8 @@ namespace Serialisation {
             return false;
         }
 
-        for (const auto &entities = *scene["entity"].as_array(); auto &entityValue: entities) {
+        for (const auto &entities = *scene["entity"].as_array();
+             auto &entityValue : entities) {
             auto &entityTable = *entityValue.as_table();
 
             std::string name = entityTable["name"].as_string()->get();
@@ -208,7 +214,7 @@ namespace Serialisation {
             return;
         }
 
-        for (const auto &lights = *scene["light"].as_array(); auto &lightValue: lights) {
+        for (const auto &lights = *scene["light"].as_array(); auto &lightValue : lights) {
             auto &lightTable = *lightValue.as_table();
 
             std::string name = lightTable["name"].as_string()->get();
@@ -217,7 +223,8 @@ namespace Serialisation {
                                                     ? LightSystem::LightType::Directional
                                                     : LightSystem::LightType::Point;
 
-            const float intensity = static_cast<float>(lightTable["intensity"].as_floating_point()->get());
+            const float intensity =
+                static_cast<float>(lightTable["intensity"].as_floating_point()->get());
             glm::vec3 color = ToVec3(*lightTable["color"].as_array());
 
             if (type == LightSystem::LightType::Directional) {
@@ -230,7 +237,8 @@ namespace Serialisation {
         }
     }
 
-    void DeserialiseTransform(const SceneSystem::Entity *entity, const toml::table &transformTable) {
+    void DeserialiseTransform(const SceneSystem::Entity *entity,
+                              const toml::table &transformTable) {
         const auto position = ToVec3(*transformTable["position"].as_array());
         TransformSystem::SetPosition(entity->transform, position);
 
@@ -241,7 +249,8 @@ namespace Serialisation {
         TransformSystem::SetRotation(entity->transform, rotation);
     }
 
-    void DeserialiseMesh(const SceneSystem::Entity *entity, const toml::table &meshTable) {
+    void DeserialiseMesh(const SceneSystem::Entity *entity,
+                         const toml::table &meshTable) {
         const std::string meshName = meshTable["name"].as_string()->get();
         const std::string meshPath = meshTable["path"].as_string()->get();
 
@@ -252,7 +261,8 @@ namespace Serialisation {
         }
     }
 
-    void DeserialiseTexture(const SceneSystem::Entity *entity, const toml::table &textureTable) {
+    void DeserialiseTexture(const SceneSystem::Entity *entity,
+                            const toml::table &textureTable) {
         const std::string textureName = textureTable["name"].as_string()->get();
         const std::string texturePath = textureTable["path"].as_string()->get();
 
@@ -263,7 +273,8 @@ namespace Serialisation {
         }
     }
 
-    void DeserialiseMaterial(const SceneSystem::Entity *entity, const toml::table &materialTable) {
+    void DeserialiseMaterial(const SceneSystem::Entity *entity,
+                             const toml::table &materialTable) {
         const std::string materialName = materialTable["name"].as_string()->get();
 
         std::string shaderName;
@@ -273,8 +284,10 @@ namespace Serialisation {
             shaderName = shaderTable["name"].as_string()->get();
 
             if (!ShaderSystem::GetShader(shaderName)) {
-                const std::string vertPath = shaderTable["vertex_path"].as_string()->get();
-                const std::string fragPath = shaderTable["fragment_path"].as_string()->get();
+                const std::string vertPath =
+                    shaderTable["vertex_path"].as_string()->get();
+                const std::string fragPath =
+                    shaderTable["fragment_path"].as_string()->get();
 
                 ResourceManager::LoadShader(shaderName, vertPath, fragPath);
             }
@@ -290,16 +303,19 @@ namespace Serialisation {
         }
 
         if (materialTable.contains("properties")) {
-            DeserialiseMaterialProperties(material, *materialTable["properties"].as_table());
+            DeserialiseMaterialProperties(material,
+                                          *materialTable["properties"].as_table());
         }
     }
 
-    void DeserialiseMaterialProperties(MaterialSystem::Material *material, const toml::table &propertiesTable) {
-        for (auto &[propKey, propValue]: propertiesTable) {
+    void DeserialiseMaterialProperties(MaterialSystem::Material *material,
+                                       const toml::table &propertiesTable) {
+        for (auto &[propKey, propValue] : propertiesTable) {
             std::string propName(propKey.str());
 
             if (propValue.is_floating_point()) {
-                const auto value = static_cast<float>(propValue.as_floating_point()->get());
+                const auto value =
+                    static_cast<float>(propValue.as_floating_point()->get());
                 MaterialSystem::SetFloat(material, propName, value);
                 continue;
             }
@@ -335,7 +351,8 @@ namespace Serialisation {
                     glm::mat4 value(1.0f);
                     for (int i = 0; i < 4; ++i) {
                         for (int j = 0; j < 4; ++j) {
-                            value[i][j] = static_cast<float>(arr[i * 4 + j].as_floating_point()->get());
+                            value[i][j] = static_cast<float>(
+                                arr[i * 4 + j].as_floating_point()->get());
                         }
                     }
                     MaterialSystem::SetMat4(material, propName, value);
@@ -351,16 +368,19 @@ namespace Serialisation {
 
         try {
             if (!std::filesystem::exists(filePath)) {
-                ErrorHandler::Warn("Scene file does not exist: " + finalFilename, __FILE__, __func__, __LINE__);
+                ErrorHandler::Warn("Scene file does not exist: " + finalFilename,
+                                   __FILE__, __func__, __LINE__);
                 return {};
             }
 
             return toml::parse_file(filePath.string());
         } catch (const toml::parse_error &err) {
-            ErrorHandler::Warn("Error parsing TOML: " + std::string(err.what()), __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Error parsing TOML: " + std::string(err.what()), __FILE__,
+                               __func__, __LINE__);
             return {};
         } catch (const std::exception &err) {
-            ErrorHandler::Warn("Error loading scene: " + std::string(err.what()), __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Error loading scene: " + std::string(err.what()),
+                               __FILE__, __func__, __LINE__);
             return {};
         }
     }
@@ -370,7 +390,8 @@ namespace Serialisation {
         std::ofstream file(GetScenesPath() / finalFilename);
 
         if (!file.is_open()) {
-            ErrorHandler::Warn("Failed to open file for writing: " + finalFilename, __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Failed to open file for writing: " + finalFilename,
+                               __FILE__, __func__, __LINE__);
             return false;
         }
 

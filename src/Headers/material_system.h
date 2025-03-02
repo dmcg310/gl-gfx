@@ -1,9 +1,9 @@
 #pragma once
 
+#include <any>
+
 #include "common.h"
 #include "shader_system.h"
-
-#include <any>
 
 namespace MaterialSystem {
     struct Property {
@@ -33,17 +33,23 @@ namespace MaterialSystem {
 
     Material *GetMaterial(const std::string &name);
 
-    void SetFloat(Material *material, const std::string &name, float value, bool persistent = true);
+    void SetFloat(Material *material, const std::string &name, float value,
+                  bool persistent = true);
 
-    void SetInt(Material *material, const std::string &name, int value, bool persistent = true);
+    void SetInt(Material *material, const std::string &name, int value,
+                bool persistent = true);
 
-    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value, bool persistent = true);
+    void SetVec2(Material *material, const std::string &name, const glm::vec2 &value,
+                 bool persistent = true);
 
-    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value, bool persistent = true);
+    void SetVec3(Material *material, const std::string &name, const glm::vec3 &value,
+                 bool persistent = true);
 
-    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value, bool persistent = true);
+    void SetVec4(Material *material, const std::string &name, const glm::vec4 &value,
+                 bool persistent = true);
 
-    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value, bool persistent = true);
+    void SetMat4(Material *material, const std::string &name, const glm::mat4 &value,
+                 bool persistent = true);
 
     void Bind(const Material *material);
 

@@ -19,7 +19,7 @@ namespace MeshSystem {
 
         mesh.minBounds = glm::vec3(std::numeric_limits<float>::max());
         mesh.maxBounds = glm::vec3(std::numeric_limits<float>::lowest());
-        for (const auto &vertex: vertices) {
+        for (const auto &vertex : vertices) {
             mesh.minBounds = glm::min(mesh.minBounds, vertex.position);
             mesh.maxBounds = glm::max(mesh.maxBounds, vertex.position);
         }
@@ -29,25 +29,30 @@ namespace MeshSystem {
 
         glGenBuffers(1, &mesh.vbo);
         glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(),
+                     GL_STATIC_DRAW);
 
         if (mesh.hasIndices) {
             glGenBuffers(1, &mesh.ebo);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ebo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t),
+                         indices.data(), GL_STATIC_DRAW);
         }
 
         // position attribute
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, position));
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                              (void *)offsetof(Vertex, position));
 
         // normal attribute
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, normal));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                              (void *)offsetof(Vertex, normal));
 
         // texture coordinate attribute
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, texCoords));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                              (void *)offsetof(Vertex, texCoords));
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -75,16 +80,19 @@ namespace MeshSystem {
         glBindVertexArray(mesh->vao);
         glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceVBO);
 
-        glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(InstanceData), nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, maxInstances * sizeof(InstanceData), nullptr,
+                     GL_DYNAMIC_DRAW);
 
         for (int i = 0; i < 4; i++) {
             glEnableVertexAttribArray(3 + i);
-            glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData), (void *) (sizeof(float) * i * 4));
+            glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData),
+                                  (void *)(sizeof(float) * i * 4));
             glVertexAttribDivisor(3 + i, 1);
         }
 
         glEnableVertexAttribArray(7);
-        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData), (void *) (sizeof(glm::mat4)));
+        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(InstanceData),
+                              (void *)(sizeof(glm::mat4)));
         glVertexAttribDivisor(7, 1);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -96,13 +104,14 @@ namespace MeshSystem {
             return;
         }
 
-        mesh->instanceCount = std::min((uint32_t) instances.size(), mesh->maxInstances);
+        mesh->instanceCount = std::min((uint32_t)instances.size(), mesh->maxInstances);
         if (mesh->instanceCount == 0) {
             return;
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceVBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, mesh->instanceCount * sizeof(InstanceData), instances.data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, mesh->instanceCount * sizeof(InstanceData),
+                        instances.data());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
@@ -122,14 +131,16 @@ namespace MeshSystem {
         }
 
         if (mesh->hasIndices) {
-            glDrawElementsInstanced(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, nullptr, mesh->instanceCount);
+            glDrawElementsInstanced(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT,
+                                    nullptr, mesh->instanceCount);
         } else {
-            glDrawArraysInstanced(GL_TRIANGLES, 0, mesh->vertexCount, mesh->instanceCount);
+            glDrawArraysInstanced(GL_TRIANGLES, 0, mesh->vertexCount,
+                                  mesh->instanceCount);
         }
     }
 
     void CleanUp() {
-        for (auto &[name, mesh]: m_meshes) {
+        for (auto &[name, mesh] : m_meshes) {
             glDeleteVertexArrays(1, &mesh.vao);
             glDeleteBuffers(1, &mesh.vbo);
 

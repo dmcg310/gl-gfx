@@ -1,11 +1,10 @@
 #pragma once
 
-#include "common.h"
-
-#include "scene_system.h"
-
-#include <toml++/toml.hpp>
 #include <filesystem>
+#include <toml++/toml.hpp>
+
+#include "common.h"
+#include "scene_system.h"
 
 namespace Serialisation {
     bool Serialise(const std::string &filename, const std::string &sceneName);
@@ -18,15 +17,19 @@ namespace Serialisation {
 
     void DeserialiseLights(const toml::table &scene);
 
-    void DeserialiseTransform(const SceneSystem::Entity *entity, const toml::table &transformTable);
+    void DeserialiseTransform(const SceneSystem::Entity *entity,
+                              const toml::table &transformTable);
 
     void DeserialiseMesh(const SceneSystem::Entity *entity, const toml::table &meshTable);
 
-    void DeserialiseTexture(const SceneSystem::Entity *entity, const toml::table &textureTable);
+    void DeserialiseTexture(const SceneSystem::Entity *entity,
+                            const toml::table &textureTable);
 
-    void DeserialiseMaterial(const SceneSystem::Entity *entity, const toml::table &materialTable);
+    void DeserialiseMaterial(const SceneSystem::Entity *entity,
+                             const toml::table &materialTable);
 
-    void DeserialiseMaterialProperties(MaterialSystem::Material *material, const toml::table &propertiesTable);
+    void DeserialiseMaterialProperties(MaterialSystem::Material *material,
+                                       const toml::table &propertiesTable);
 
     toml::table Read(const std::string &filename);
 
@@ -60,10 +63,7 @@ namespace Serialisation {
             return glm::vec2(0.0f);
         }
 
-        return {
-            arr[0].value_or(0.0f),
-            arr[1].value_or(0.0f)
-        };
+        return {arr[0].value_or(0.0f), arr[1].value_or(0.0f)};
     }
 
     inline glm::vec3 ToVec3(const toml::array &arr) {
@@ -71,11 +71,7 @@ namespace Serialisation {
             return glm::vec3(0.0f);
         }
 
-        return {
-            arr[0].value_or(0.0f),
-            arr[1].value_or(0.0f),
-            arr[2].value_or(0.0f)
-        };
+        return {arr[0].value_or(0.0f), arr[1].value_or(0.0f), arr[2].value_or(0.0f)};
     }
 
     inline glm::vec4 ToVec4(const toml::array &arr) {
@@ -83,12 +79,8 @@ namespace Serialisation {
             return glm::vec4(1.0f);
         }
 
-        return {
-            arr[0].value_or(1.0f),
-            arr[1].value_or(1.0f),
-            arr[2].value_or(1.0f),
-            arr[3].value_or(1.0f)
-        };
+        return {arr[0].value_or(1.0f), arr[1].value_or(1.0f), arr[2].value_or(1.0f),
+                arr[3].value_or(1.0f)};
     }
 
     inline std::string EnsureTomlExtension(const std::string &filename) {
@@ -100,22 +92,18 @@ namespace Serialisation {
     }
 
     inline std::filesystem::path GetScenesPath() {
-        std::filesystem::path paths[] = {
-            "Scenes",
-            "../Scenes",
-            "../../Scenes",
-            "gl-gfx/Scenes"
-        };
+        std::filesystem::path paths[] = {"Scenes", "../Scenes", "../../Scenes",
+                                         "gl-gfx/Scenes"};
 
-        for (const auto &path: paths) {
+        for (const auto &path : paths) {
             if (std::filesystem::exists(path)) {
                 return path;
             }
         }
 
-        ErrorHandler::Warn(
-            "Couldn't determine scenes directory, using CWD: " + std::filesystem::current_path().string(),
-            __FILE__, __func__, __LINE__);
+        ErrorHandler::Warn("Couldn't determine scenes directory, using CWD: " +
+                               std::filesystem::current_path().string(),
+                           __FILE__, __func__, __LINE__);
 
         return "";
     }

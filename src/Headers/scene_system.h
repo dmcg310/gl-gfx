@@ -1,12 +1,11 @@
 #pragma once
 
-#include "mesh_system.h"
+#include "common.h"
+#include "light_system.h"
 #include "material_system.h"
+#include "mesh_system.h"
 #include "texture_system.h"
 #include "transform_system.h"
-#include "light_system.h"
-
-#include "common.h"
 
 namespace SceneSystem {
     struct Entity {

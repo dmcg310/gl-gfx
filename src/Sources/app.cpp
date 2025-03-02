@@ -1,10 +1,10 @@
 #include "app.h"
 
 #include "backend.h"
+#include "light_system.h"
 #include "render_system.h"
 #include "resource_manager.h"
 #include "scene_system.h"
-#include "light_system.h"
 #include "serialisation.h"
 
 namespace App {

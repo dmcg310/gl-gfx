@@ -1,6 +1,7 @@
 #include "texture_system.h"
 
 #include <filesystem>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -8,14 +9,11 @@ namespace TextureSystem {
     static std::unordered_map<std::string, Texture> m_textures;
 
     static std::string GetTexturePath(const std::string &filename) {
-        std::filesystem::path paths[] = {
-            "Assets/Textures",
-            "../Assets/Textures",
-            "../../Assets/Textures",
-            "gl-gfx/Assets/Textures"
-        };
+        std::filesystem::path paths[] = {"Assets/Textures", "../Assets/Textures",
+                                         "../../Assets/Textures",
+                                         "gl-gfx/Assets/Textures"};
 
-        for (const auto &basePath: paths) {
+        for (const auto &basePath : paths) {
             if (std::filesystem::path fullPath = basePath / filename; exists(fullPath)) {
                 return fullPath.string();
             }
@@ -29,36 +27,37 @@ namespace TextureSystem {
         stbi_set_flip_vertically_on_load(true);
     }
 
-    Texture *CreateTexture(const std::string &name, const std::string &path, const bool generateMips) {
+    Texture *CreateTexture(const std::string &name, const std::string &path,
+                           const bool generateMips) {
         Texture texture{};
         texture.name = name;
         texture.isValid = false;
 
         const std::filesystem::path textureFile = std::filesystem::path(path).filename();
 
-        unsigned char *data = stbi_load(
-            GetTexturePath(textureFile.string()).c_str(),
-            &texture.width,
-            &texture.height,
-            &texture.channels,
-            0
-        );
+        unsigned char *data =
+            stbi_load(GetTexturePath(textureFile.string()).c_str(), &texture.width,
+                      &texture.height, &texture.channels, 0);
         if (!data) {
-            ErrorHandler::Warn("Failed to load texture: " + path, __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Failed to load texture: " + path, __FILE__, __func__,
+                               __LINE__);
             return nullptr;
         }
 
         switch (texture.channels) {
-            case 1: texture.format = GL_RED;
+            case 1:
+                texture.format = GL_RED;
                 break;
-            case 3: texture.format = GL_RGB;
+            case 3:
+                texture.format = GL_RGB;
                 break;
-            case 4: texture.format = GL_RGBA;
+            case 4:
+                texture.format = GL_RGBA;
                 break;
             default:
                 ErrorHandler::Warn(
-                    "Unsupported number of channels: " + std::to_string(texture.channels), __FILE__, __func__,
-                    __LINE__);
+                    "Unsupported number of channels: " + std::to_string(texture.channels),
+                    __FILE__, __func__, __LINE__);
                 stbi_image_free(data);
                 return nullptr;
         }
@@ -68,17 +67,8 @@ namespace TextureSystem {
         glGenTextures(1, &texture.id);
         glBindTexture(GL_TEXTURE_2D, texture.id);
 
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            texture.format,
-            texture.width,
-            texture.height,
-            0,
-            texture.format,
-            texture.dataType,
-            data
-        );
+        glTexImage2D(GL_TEXTURE_2D, 0, texture.format, texture.width, texture.height, 0,
+                     texture.format, texture.dataType, data);
 
         if (generateMips) {
             glGenerateMipmap(GL_TEXTURE_2D);
@@ -86,7 +76,8 @@ namespace TextureSystem {
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMips ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        generateMips ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         stbi_image_free(data);
@@ -98,8 +89,8 @@ namespace TextureSystem {
         return &m_textures[name];
     }
 
-    Texture *CreateEmpty(const std::string &name, const int width, const int height, const GLenum format,
-                         const GLenum dataType) {
+    Texture *CreateEmpty(const std::string &name, const int width, const int height,
+                         const GLenum format, const GLenum dataType) {
         Texture texture{};
         texture.name = name;
         texture.width = width;
@@ -111,17 +102,8 @@ namespace TextureSystem {
         glGenTextures(1, &texture.id);
         glBindTexture(GL_TEXTURE_2D, texture.id);
 
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            format,
-            width,
-            height,
-            0,
-            GL_RGBA,
-            dataType,
-            nullptr
-        );
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, dataType,
+                     nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -152,7 +134,7 @@ namespace TextureSystem {
     }
 
     void CleanUp() {
-        for (auto &[name, texture]: m_textures) {
+        for (auto &[name, texture] : m_textures) {
             if (texture.isValid) {
                 glDeleteTextures(1, &texture.id);
             }

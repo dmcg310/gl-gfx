@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.h"
-
 #include "transform_system.h"
 
 namespace CameraSystem {
@@ -41,7 +40,8 @@ namespace CameraSystem {
 
     void UpdateCamera(Camera *camera, float deltaTime);
 
-    void SetProjection(Camera *camera, float fov, float aspect, float nearPlane, float farPlane);
+    void SetProjection(Camera *camera, float fov, float aspect, float nearPlane,
+                       float farPlane);
 
     const glm::mat4 &GetViewMatrix(Camera *camera);
 

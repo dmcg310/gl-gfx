@@ -12,8 +12,8 @@ namespace LightSystem {
         m_lightPtrs.clear();
     }
 
-    Light *CreateDirectionalLight(const std::string &name, const glm::vec3 &direction, const glm::vec3 &color,
-                                  const float intensity) {
+    Light *CreateDirectionalLight(const std::string &name, const glm::vec3 &direction,
+                                  const glm::vec3 &color, const float intensity) {
         Light light;
         light.name = name;
         light.type = LightType::Directional;
@@ -28,8 +28,8 @@ namespace LightSystem {
         return &m_lights[name];
     }
 
-    Light *CreatePointLight(const std::string &name, const glm::vec3 &position, const glm::vec3 &color,
-                            float intensity) {
+    Light *CreatePointLight(const std::string &name, const glm::vec3 &position,
+                            const glm::vec3 &color, float intensity) {
         Light light;
         light.name = name;
         light.type = LightType::Point;

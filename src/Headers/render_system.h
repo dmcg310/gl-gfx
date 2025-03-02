@@ -1,8 +1,7 @@
 #pragma once
 
-#include "common.h"
-
 #include "camera_system.h"
+#include "common.h"
 
 namespace RenderSystem {
     void Init();

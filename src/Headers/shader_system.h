@@ -13,7 +13,8 @@ namespace ShaderSystem {
 
     void Init();
 
-    Shader *CreateShader(const std::string &name, const std::string &vertPath, const std::string &fragPath);
+    Shader *CreateShader(const std::string &name, const std::string &vertPath,
+                         const std::string &fragPath);
 
     Shader *GetShader(const std::string &name);
 

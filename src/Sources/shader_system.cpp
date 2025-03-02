@@ -11,7 +11,8 @@ namespace ShaderSystem {
         m_uniformLocations.clear();
     }
 
-    Shader *CreateShader(const std::string &name, const std::string &vertPath, const std::string &fragPath) {
+    Shader *CreateShader(const std::string &name, const std::string &vertPath,
+                         const std::string &fragPath) {
         Shader shader{
             .programId = ShaderManager::CreateProgram(vertPath, fragPath),
             .vertPath = vertPath,
@@ -46,13 +47,15 @@ namespace ShaderSystem {
 
     static GLint GetUniformLocation(const Shader *shader, const std::string &name) {
         const std::string key = std::to_string(shader->programId) + "_" + name;
-        if (const auto it = m_uniformLocations.find(key); it != m_uniformLocations.end()) {
+        if (const auto it = m_uniformLocations.find(key);
+            it != m_uniformLocations.end()) {
             return it->second;
         }
 
         const GLint location = glGetUniformLocation(shader->programId, name.c_str());
         if (location == -1) {
-            ErrorHandler::Warn("Uniform '" + name + "' not found in shader program", __FILE__, __func__, __LINE__);
+            ErrorHandler::Warn("Uniform '" + name + "' not found in shader program",
+                               __FILE__, __func__, __LINE__);
         }
 
         m_uniformLocations[key] = location;

@@ -3,10 +3,7 @@
 #include "common.h"
 
 namespace CursorManager {
-    enum class CursorMode {
-        CAMERA,
-        UI
-    };
+    enum class CursorMode { CAMERA, UI };
 
     void Init();
 

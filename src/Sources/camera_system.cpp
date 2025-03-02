@@ -1,8 +1,8 @@
 #include "camera_system.h"
 
 #include "backend.h"
-#include "input.h"
 #include "cursor_manager.h"
+#include "input.h"
 
 namespace CameraSystem {
     static std::unordered_map<std::string, Camera> m_cameras;
@@ -98,7 +98,8 @@ namespace CameraSystem {
         if (zoomDelta != 0.0f) {
             camera->zoom = glm::clamp(camera->zoom + zoomDelta, 1.0f, 90.0f);
             const float aspect = Backend::GetWindowWidth() / Backend::GetWindowHeight();
-            camera->projMatrix = glm::perspective(glm::radians(camera->zoom), aspect, 0.1f, 100.0f);
+            camera->projMatrix =
+                glm::perspective(glm::radians(camera->zoom), aspect, 0.1f, 100.0f);
         }
 
         TransformSystem::SetPosition(camera->transform, camera->position);
@@ -106,8 +107,8 @@ namespace CameraSystem {
         UpdateCameraVectors(camera);
     }
 
-    void SetProjection(Camera *camera, const float fov, const float aspect, const float nearPlane,
-                       const float farPlane) {
+    void SetProjection(Camera *camera, const float fov, const float aspect,
+                       const float nearPlane, const float farPlane) {
         if (!camera) {
             return;
         }
@@ -116,7 +117,8 @@ namespace CameraSystem {
         camera->aspectRatio = aspect;
         camera->nearPlane = nearPlane;
         camera->farPlane = farPlane;
-        camera->projMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
+        camera->projMatrix =
+            glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
     }
 
     const glm::mat4 &GetViewMatrix(Camera *camera) {
@@ -126,7 +128,8 @@ namespace CameraSystem {
         }
 
         if (camera->viewDirty) {
-            camera->viewMatrix = glm::lookAt(camera->position, camera->position + camera->front, camera->up);
+            camera->viewMatrix = glm::lookAt(
+                camera->position, camera->position + camera->front, camera->up);
             camera->viewDirty = false;
         }
 
@@ -174,7 +177,8 @@ namespace CameraSystem {
         }
 
         const float aspectRatio = windowWidth / height;
-        SetProjection(m_mainCamera, m_mainCamera->fov, aspectRatio, m_mainCamera->nearPlane, m_mainCamera->farPlane);
+        SetProjection(m_mainCamera, m_mainCamera->fov, aspectRatio,
+                      m_mainCamera->nearPlane, m_mainCamera->farPlane);
     }
 
     void CleanUp() {

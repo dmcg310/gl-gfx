@@ -2,14 +2,13 @@
 
 #include <renderer.h>
 
-#include "imgui.h"
+#include "backend.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-
-#include "backend.h"
 #include "cursor_manager.h"
-#include "scene_system.h"
+#include "imgui.h"
 #include "resource_manager.h"
+#include "scene_system.h"
 #include "serialisation.h"
 
 namespace Ui {
@@ -31,20 +30,12 @@ namespace Ui {
     static void RenderVisualSettingsSection() {
         if (ImGui::CollapsingHeader("Visual Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
             const glm::vec4 currentClearColor = Renderer::GetClearColor();
-            float clearColor[4] = {
-                currentClearColor.r,
-                currentClearColor.g,
-                currentClearColor.b,
-                currentClearColor.a
-            };
+            float clearColor[4] = {currentClearColor.r, currentClearColor.g,
+                                   currentClearColor.b, currentClearColor.a};
 
             if (ImGui::ColorEdit4("Background Color", clearColor)) {
-                Renderer::SetClearColor(glm::vec4(
-                    clearColor[0],
-                    clearColor[1],
-                    clearColor[2],
-                    clearColor[3]
-                ));
+                Renderer::SetClearColor(glm::vec4(clearColor[0], clearColor[1],
+                                                  clearColor[2], clearColor[3]));
             }
         }
     }
@@ -52,12 +43,15 @@ namespace Ui {
     static void RenderEntityProperties(SceneSystem::Entity *entity, bool isLight) {
         if (entity->transform) {
             const glm::vec3 position = TransformSystem::GetPosition(entity->transform);
-            if (float pos[3] = {position.x, position.y, position.z}; ImGui::DragFloat3("Position", pos, 0.1f)) {
-                TransformSystem::SetPosition(entity->transform, glm::vec3(pos[0], pos[1], pos[2]));
+            if (float pos[3] = {position.x, position.y, position.z};
+                ImGui::DragFloat3("Position", pos, 0.1f)) {
+                TransformSystem::SetPosition(entity->transform,
+                                             glm::vec3(pos[0], pos[1], pos[2]));
 
                 if (isLight) {
                     for (const std::vector<LightSystem::Light *> &lights =
-                                 LightSystem::GetAllLights(); auto *light: lights) {
+                             LightSystem::GetAllLights();
+                         auto *light : lights) {
                         if (light->name == entity->name ||
                             light->name + "_visual" == entity->name) {
                             light->position = glm::vec3(pos[0], pos[1], pos[2]);
@@ -68,30 +62,30 @@ namespace Ui {
             }
 
             const glm::vec3 scale = TransformSystem::GetScale(entity->transform);
-            if (float scl[3] = {scale.x, scale.y, scale.z}; ImGui::DragFloat3("Scale", scl, 0.1f, 0.1f, 10.0f)) {
-                TransformSystem::SetScale(entity->transform, glm::vec3(scl[0], scl[1], scl[2]));
+            if (float scl[3] = {scale.x, scale.y, scale.z};
+                ImGui::DragFloat3("Scale", scl, 0.1f, 0.1f, 10.0f)) {
+                TransformSystem::SetScale(entity->transform,
+                                          glm::vec3(scl[0], scl[1], scl[2]));
             }
 
             const glm::vec3 rotation = entity->transform->rotation;
             if (float rot[3] = {rotation.x, rotation.y, rotation.z};
                 ImGui::DragFloat3("Rotation", rot, 1.0f, -180.0f, 180.0f)) {
-                TransformSystem::SetRotation(entity->transform, glm::vec3(rot[0], rot[1], rot[2]));
+                TransformSystem::SetRotation(entity->transform,
+                                             glm::vec3(rot[0], rot[1], rot[2]));
             }
         }
 
-        float color[4] = {
-            entity->color.r,
-            entity->color.g,
-            entity->color.b,
-            entity->color.a
-        };
+        float color[4] = {entity->color.r, entity->color.g, entity->color.b,
+                          entity->color.a};
 
         if (ImGui::ColorEdit4("Color", color)) {
             entity->color = glm::vec4(color[0], color[1], color[2], color[3]);
 
             if (isLight) {
                 for (const std::vector<LightSystem::Light *> &lights =
-                             LightSystem::GetAllLights(); auto *light: lights) {
+                         LightSystem::GetAllLights();
+                     auto *light : lights) {
                     if (light->name == entity->name ||
                         light->name + "_visual" == entity->name) {
                         light->color = glm::vec3(color[0], color[1], color[2]);
@@ -104,7 +98,8 @@ namespace Ui {
 
     static void RenderLightProperties(const std::string &entityName) {
         for (const std::vector<LightSystem::Light *> &lights =
-                     LightSystem::GetAllLights(); auto *light: lights) {
+                 LightSystem::GetAllLights();
+             auto *light : lights) {
             if (light->name == entityName || light->name + "_visual" == entityName) {
                 float intensity = light->intensity;
                 if (ImGui::SliderFloat("Light Intensity", &intensity, 0.0f, 5.0f)) {
@@ -112,11 +107,8 @@ namespace Ui {
                 }
 
                 if (light->type == LightSystem::LightType::Directional) {
-                    float direction[3] = {
-                        light->direction.x,
-                        light->direction.y,
-                        light->direction.z
-                    };
+                    float direction[3] = {light->direction.x, light->direction.y,
+                                          light->direction.z};
 
                     if (ImGui::DragFloat3("Direction", direction, 0.1f, -1.0f, 1.0f)) {
                         const float length = sqrtf(direction[0] * direction[0] +
@@ -137,24 +129,26 @@ namespace Ui {
 
     static void RenderEntityControlsSection() {
         if (ImGui::CollapsingHeader("Entity Controls", ImGuiTreeNodeFlags_DefaultOpen)) {
-            const std::vector<SceneSystem::Entity *> &entities = SceneSystem::GetAllEntities();
+            const std::vector<SceneSystem::Entity *> &entities =
+                SceneSystem::GetAllEntities();
 
             std::vector<const char *> entityNames;
             entityNames.reserve(entities.size());
 
-            for (const auto *entity: entities) {
+            for (const auto *entity : entities) {
                 entityNames.push_back(entity->name.c_str());
             }
 
-            if (ImGui::Combo("Select Entity", &selectedEntityIndex,
-                             entityNames.data(), static_cast<int>(entityNames.size()))) {
+            if (ImGui::Combo("Select Entity", &selectedEntityIndex, entityNames.data(),
+                             static_cast<int>(entityNames.size()))) {
             }
 
-            if (selectedEntityIndex >= 0 && selectedEntityIndex < entities.size()) {
+            if (selectedEntityIndex >= 0 &&
+                selectedEntityIndex < static_cast<int>(entities.size())) {
                 SceneSystem::Entity *entity = entities[selectedEntityIndex];
 
-                const bool isLight = entity->name.find("light") != std::string::npos
-                                     || entity->name.find("point") != std::string::npos;
+                const bool isLight = entity->name.find("light") != std::string::npos ||
+                                     entity->name.find("point") != std::string::npos;
 
                 ImGui::Separator();
                 ImGui::Text("Entity: %s", entity->name.c_str());
@@ -169,19 +163,27 @@ namespace Ui {
     }
 
     static void RenderMaterialPropertiesSection() {
-        if (ImGui::CollapsingHeader("Material Properties", ImGuiTreeNodeFlags_DefaultOpen)) {
+        if (ImGui::CollapsingHeader("Material Properties",
+                                    ImGuiTreeNodeFlags_DefaultOpen)) {
             bool updateMaterial = false;
 
-            updateMaterial |= ImGui::SliderFloat("Ambient Strength", &ambientStrength, 0.0f, 1.0f);
-            updateMaterial |= ImGui::SliderFloat("Diffuse Strength", &diffuseStrength, 0.0f, 1.0f);
-            updateMaterial |= ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f);
+            updateMaterial |=
+                ImGui::SliderFloat("Ambient Strength", &ambientStrength, 0.0f, 1.0f);
+            updateMaterial |=
+                ImGui::SliderFloat("Diffuse Strength", &diffuseStrength, 0.0f, 1.0f);
+            updateMaterial |=
+                ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f);
             updateMaterial |= ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f);
 
             if (updateMaterial) {
-                if (MaterialSystem::Material *defaultMaterial = ResourceManager::GetDefaultMaterial()) {
-                    MaterialSystem::SetFloat(defaultMaterial, "ambientStrength", ambientStrength);
-                    MaterialSystem::SetFloat(defaultMaterial, "diffuseStrength", diffuseStrength);
-                    MaterialSystem::SetFloat(defaultMaterial, "specularStrength", specularStrength);
+                if (MaterialSystem::Material *defaultMaterial =
+                        ResourceManager::GetDefaultMaterial()) {
+                    MaterialSystem::SetFloat(defaultMaterial, "ambientStrength",
+                                             ambientStrength);
+                    MaterialSystem::SetFloat(defaultMaterial, "diffuseStrength",
+                                             diffuseStrength);
+                    MaterialSystem::SetFloat(defaultMaterial, "specularStrength",
+                                             specularStrength);
                     MaterialSystem::SetFloat(defaultMaterial, "shininess", shininess);
                 }
             }
@@ -191,7 +193,9 @@ namespace Ui {
     static void RenderSceneManagementPanel() {
         if (ImGui::CollapsingHeader("Scene Management", ImGuiTreeNodeFlags_DefaultOpen)) {
             const std::string currentSceneName = SceneSystem::GetSceneName();
-            ImGui::Text("Current Scene: %s", currentSceneName.empty() ? "Unnamed Scene" : currentSceneName.c_str());
+            ImGui::Text("Current Scene: %s", currentSceneName.empty()
+                                                 ? "Unnamed Scene"
+                                                 : currentSceneName.c_str());
 
             ImGui::Separator();
 
@@ -199,12 +203,14 @@ namespace Ui {
             if (ImGui::TreeNodeEx("Save Scene", ImGuiTreeNodeFlags_DefaultOpen)) {
                 static char sceneNameBuffer[128] = "";
                 if (ImGui::Button("Use Current Name")) {
-                    strncpy(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
+                    strncpy(sceneNameBuffer, currentSceneName.c_str(),
+                            sizeof(sceneNameBuffer) - 1);
                     sceneNameBuffer[sizeof(sceneNameBuffer) - 1] = '\0';
                 }
 
                 ImGui::SameLine();
-                ImGui::InputText("Scene Name", sceneNameBuffer, IM_ARRAYSIZE(sceneNameBuffer));
+                ImGui::InputText("Scene Name", sceneNameBuffer,
+                                 IM_ARRAYSIZE(sceneNameBuffer));
                 static char filenameBuffer[128] = "";
                 if (ImGui::Button("Use Scene Name")) {
                     strncpy(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
@@ -212,7 +218,8 @@ namespace Ui {
                 }
 
                 ImGui::SameLine();
-                ImGui::InputText("Filename", filenameBuffer, IM_ARRAYSIZE(filenameBuffer));
+                ImGui::InputText("Filename", filenameBuffer,
+                                 IM_ARRAYSIZE(filenameBuffer));
                 if (ImGui::IsItemHovered()) {
                     ImGui::SetTooltip("File will be saved to the scenes directory");
                 }
@@ -226,7 +233,8 @@ namespace Ui {
                     }
                 }
 
-                if (ImGui::BeginPopupModal("Save Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Save Error", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Scene name and filename cannot be empty!");
                     ImGui::Separator();
 
@@ -241,7 +249,8 @@ namespace Ui {
                     ImGui::OpenPopup("Save Scene?");
                 }
 
-                if (ImGui::BeginPopupModal("Save Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Save Scene?", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Are you sure you want to save the scene?");
                     ImGui::Text("Scene Name: %s", sceneNameBuffer);
                     ImGui::Text("Filename: %s", filenameBuffer);
@@ -273,7 +282,8 @@ namespace Ui {
                     ImGui::EndPopup();
                 }
 
-                if (ImGui::BeginPopupModal("Save Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Save Success", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Scene saved successfully!");
                     ImGui::Separator();
 
@@ -284,7 +294,8 @@ namespace Ui {
                     ImGui::EndPopup();
                 }
 
-                if (ImGui::BeginPopupModal("Save Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Save Failed", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Failed to save scene!");
                     ImGui::Separator();
 
@@ -303,9 +314,11 @@ namespace Ui {
             // loading
             if (ImGui::TreeNodeEx("Load Scene", ImGuiTreeNodeFlags_DefaultOpen)) {
                 static char loadFilenameBuffer[128] = "";
-                ImGui::InputText("Filename to Load", loadFilenameBuffer, IM_ARRAYSIZE(loadFilenameBuffer));
+                ImGui::InputText("Filename to Load", loadFilenameBuffer,
+                                 IM_ARRAYSIZE(loadFilenameBuffer));
                 if (ImGui::IsItemHovered()) {
-                    ImGui::SetTooltip("Enter the scene file to load (from scenes directory)");
+                    ImGui::SetTooltip(
+                        "Enter the scene file to load (from scenes directory)");
                 }
 
                 static bool showLoadConfirmation = false;
@@ -317,7 +330,8 @@ namespace Ui {
                     }
                 }
 
-                if (ImGui::BeginPopupModal("Load Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Load Error", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Filename cannot be empty!");
                     ImGui::Separator();
 
@@ -332,7 +346,8 @@ namespace Ui {
                     ImGui::OpenPopup("Load Scene?");
                 }
 
-                if (ImGui::BeginPopupModal("Load Scene?", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Load Scene?", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Are you sure you want to load the scene?");
                     ImGui::Text("All unsaved changes to the current scene will be lost.");
                     ImGui::Text("Filename: %s", loadFilenameBuffer);
@@ -360,7 +375,8 @@ namespace Ui {
                     ImGui::EndPopup();
                 }
 
-                if (ImGui::BeginPopupModal("Load Success", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Load Success", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Scene loaded successfully!");
                     ImGui::Separator();
 
@@ -371,7 +387,8 @@ namespace Ui {
                     ImGui::EndPopup();
                 }
 
-                if (ImGui::BeginPopupModal("Load Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                if (ImGui::BeginPopupModal("Load Failed", NULL,
+                                           ImGuiWindowFlags_AlwaysAutoResize)) {
                     ImGui::Text("Failed to load scene!");
                     ImGui::Text("Check if the file exists in the scenes directory.");
                     ImGui::Separator();
@@ -431,7 +448,6 @@ namespace Ui {
         ImGui_ImplOpenGL3_Init("#version 460");
     }
 
-
     void BeginFrame() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -463,7 +479,8 @@ namespace Ui {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        if (const ImGuiIO &io = ImGui::GetIO(); io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        if (const ImGuiIO &io = ImGui::GetIO();
+            io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow *backup_current_context = glfwGetCurrentContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();

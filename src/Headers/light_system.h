@@ -3,10 +3,7 @@
 #include "common.h"
 
 namespace LightSystem {
-    enum class LightType {
-        Directional,
-        Point
-    };
+    enum class LightType { Directional, Point };
 
     struct Light {
         std::string name;
@@ -21,10 +18,12 @@ namespace LightSystem {
     void Init();
 
     Light *CreateDirectionalLight(const std::string &name, const glm::vec3 &direction,
-                                  const glm::vec3 &color = glm::vec3(1.0f), float intensity = 1.0f);
+                                  const glm::vec3 &color = glm::vec3(1.0f),
+                                  float intensity = 1.0f);
 
     Light *CreatePointLight(const std::string &name, const glm::vec3 &position,
-                            const glm::vec3 &color = glm::vec3(1.0f), float intensity = 1.0f);
+                            const glm::vec3 &color = glm::vec3(1.0f),
+                            float intensity = 1.0f);
 
     Light *GetLight(const std::string &name);
 

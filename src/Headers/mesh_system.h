@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.h"
-
 #include <vector>
+
+#include "common.h"
 
 namespace MeshSystem {
     struct Mesh {
@@ -24,11 +24,8 @@ namespace MeshSystem {
 
     void Init();
 
-    Mesh *CreateMesh(
-        const std::string &name,
-        const std::vector<Vertex> &vertices,
-        const std::vector<uint32_t> &indices = std::vector<uint32_t>()
-    );
+    Mesh *CreateMesh(const std::string &name, const std::vector<Vertex> &vertices,
+                     const std::vector<uint32_t> &indices = std::vector<uint32_t>());
 
     Mesh *GetMesh(const std::string &name);
 
