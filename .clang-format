@@ -1,0 +1,9 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 90
+AlignConsecutiveAssignments: false
+AllowShortFunctionsOnASingleLine: Empty
+BreakBeforeBraces: Attach
+FixNamespaceComments: false

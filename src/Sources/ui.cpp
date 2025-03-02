@@ -199,7 +199,7 @@ namespace Ui {
             if (ImGui::TreeNodeEx("Save Scene", ImGuiTreeNodeFlags_DefaultOpen)) {
                 static char sceneNameBuffer[128] = "";
                 if (ImGui::Button("Use Current Name")) {
-                    strncpy_s(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
+                    strncpy(sceneNameBuffer, currentSceneName.c_str(), sizeof(sceneNameBuffer) - 1);
                     sceneNameBuffer[sizeof(sceneNameBuffer) - 1] = '\0';
                 }
 
@@ -207,7 +207,7 @@ namespace Ui {
                 ImGui::InputText("Scene Name", sceneNameBuffer, IM_ARRAYSIZE(sceneNameBuffer));
                 static char filenameBuffer[128] = "";
                 if (ImGui::Button("Use Scene Name")) {
-                    strncpy_s(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
+                    strncpy(filenameBuffer, sceneNameBuffer, sizeof(filenameBuffer) - 1);
                     filenameBuffer[sizeof(filenameBuffer) - 1] = '\0';
                 }
 

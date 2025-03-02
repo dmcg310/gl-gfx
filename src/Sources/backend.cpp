@@ -33,7 +33,10 @@ namespace Backend {
 		glfwInit();
 
 		glfwSetErrorCallback([](int error, const char *description) {
-			std::cout << "[GLFW Error](" << std::to_string(error) << "): " << description << "\n";
+			if (error != 65548 && error != GLFW_FEATURE_UNAVAILABLE) {
+					std::cerr << "[GLFW Error](" << std::to_string(error)
+										<< "): " << description << "\n";
+			}
 		});
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -66,6 +69,7 @@ namespace Backend {
 		glfwSetWindowFocusCallback(m_window, window_focus_callback);
 
 		glfwMakeContextCurrent(m_window);
+		glfwSwapInterval(0);
 
 		if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
 			ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__, __LINE__);
