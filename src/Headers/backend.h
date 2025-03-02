@@ -36,4 +36,6 @@ namespace Backend {
     float GetWindowHeight();
 
     float GetWindowTime();
+
+    int GetPlatform();
 }

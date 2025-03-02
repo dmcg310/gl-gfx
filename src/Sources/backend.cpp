@@ -22,6 +22,8 @@ namespace Backend {
     int m_currentWindowWidth = 0;
     int m_currentWindowHeight = 0;
 
+    int m_platform;
+
     void framebuffer_resize_callback(GLFWwindow *window, int w, int h);
 
     void window_focus_callback(GLFWwindow *window, int focused);
@@ -33,10 +35,8 @@ namespace Backend {
         glfwInit();
 
         glfwSetErrorCallback([](int error, const char *description) {
-            if (error != 65548 && error != GLFW_FEATURE_UNAVAILABLE) {
-                std::cerr << "[GLFW Error](" << std::to_string(error)
-                          << "): " << description << "\n";
-            }
+            std::cerr << "[GLFW Error](" << std::to_string(error) << "): " << description
+                      << "\n";
         });
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -48,6 +48,7 @@ namespace Backend {
 
         m_monitor = glfwGetPrimaryMonitor();
         m_mode = glfwGetVideoMode(m_monitor);
+        m_platform = glfwGetPlatform();
 
         glfwWindowHint(GLFW_RED_BITS, m_mode->redBits);
         glfwWindowHint(GLFW_GREEN_BITS, m_mode->greenBits);
@@ -134,7 +135,9 @@ namespace Backend {
             m_currentWindowHeight = m_windowedHeight;
             m_window =
                 glfwCreateWindow(m_windowedWidth, m_windowedHeight, "gl-gfx", NULL, NULL);
-            glfwSetWindowPos(m_window, 0, 0);
+            if (m_platform != GLFW_PLATFORM_WAYLAND) {
+                glfwSetWindowPos(m_window, 0, 0);
+            }
         } else if (windowedMode == WindowedMode::FULLSCREEN) {
             m_currentWindowWidth = m_fullscreenWidth;
             m_currentWindowHeight = m_fullscreenHeight;
@@ -151,13 +154,17 @@ namespace Backend {
             m_currentWindowHeight = m_windowedHeight;
             glfwSetWindowMonitor(m_window, nullptr, 0, 0, m_windowedWidth,
                                  m_windowedHeight, m_mode->refreshRate);
-            glfwSetWindowPos(m_window, 0, 0);
+            if (m_platform != GLFW_PLATFORM_WAYLAND) {
+                glfwSetWindowPos(m_window, 0, 0);
+            }
         } else if (windowedMode == WindowedMode::FULLSCREEN) {
             m_currentWindowWidth = m_fullscreenWidth;
             m_currentWindowHeight = m_fullscreenHeight;
             glfwSetWindowMonitor(m_window, nullptr, 0, 0, m_fullscreenWidth - 1,
                                  m_fullscreenHeight - 1, m_mode->refreshRate);
-            glfwSetWindowPos(m_window, 0, 0);
+            if (m_platform != GLFW_PLATFORM_WAYLAND) {
+                glfwSetWindowPos(m_window, 0, 0);
+            }
         }
 
         m_windowedMode = windowedMode;
@@ -198,6 +205,10 @@ namespace Backend {
 
     float GetWindowTime() {
         return (float)glfwGetTime();
+    }
+
+    int GetPlatform() {
+        return m_platform;
     }
 
     void framebuffer_resize_callback(GLFWwindow * /*window*/, const int w, const int h) {
