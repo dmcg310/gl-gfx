@@ -7,6 +7,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "cursor_manager.h"
 #include "imgui.h"
+#include "input.h"
 #include "scene_system.h"
 #include "serialisation.h"
 
@@ -478,11 +479,33 @@ namespace Ui {
     }
 
     void BeginFrame() {
+        // we have to capture tab before imgui does for ui navigation
+        static bool tabWasPressed = false;
+
+        bool tabIsPressed = Input::KeyPressed(KEY_TAB);
+        if (tabIsPressed && !tabWasPressed) {
+            const bool wasLocked = CursorManager::IsCursorModeLocked();
+            if (wasLocked) {
+                CursorManager::UnlockCursorMode();
+            }
+
+            CursorManager::ToggleCursorMode();
+            if (wasLocked) {
+                CursorManager::LockCursorMode();
+            }
+        }
+
+        tabWasPressed = tabIsPressed;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
         ImGuiIO &io = ImGui::GetIO();
+        // don't handle tab
+        io.KeysData[ImGuiKey_Tab].Down = false;
+        io.KeysData[ImGuiKey_Tab].DownDuration = -1.0f;
+        io.KeysData[ImGuiKey_Tab].DownDurationPrev = -1.0f;
+
         if (CursorManager::IsInCameraMode()) {
             static ImVec2 lastMousePos = io.MousePos;
             io.ConfigFlags |= ImGuiConfigFlags_NoMouse;

@@ -69,21 +69,6 @@ namespace CursorManager {
         return m_currentMode == CursorMode::UI;
     }
 
-    void Update() {
-        if (Input::KeyPressed(KEY_TAB)) {
-            const bool wasLocked = m_isLocked;
-            if (wasLocked) {
-                UnlockCursorMode();
-            }
-
-            ToggleCursorMode();
-
-            if (wasLocked) {
-                LockCursorMode();
-            }
-        }
-    }
-
     void CleanUp() {
         UnlockCursorMode();
         if (const auto window = Backend::GetWindowHandle()) {

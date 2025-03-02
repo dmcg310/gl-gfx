@@ -90,7 +90,6 @@ namespace Backend {
 
     void Update() {
         Input::Update();
-        CursorManager::Update();
     }
 
     void PrepareUi() {

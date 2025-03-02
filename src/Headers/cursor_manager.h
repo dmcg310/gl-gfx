@@ -23,7 +23,5 @@ namespace CursorManager {
 
     bool IsInUiMode();
 
-    void Update();
-
     void CleanUp();
 }
