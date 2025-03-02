@@ -7,3 +7,4 @@ AlignConsecutiveAssignments: false
 AllowShortFunctionsOnASingleLine: Empty
 BreakBeforeBraces: Attach
 FixNamespaceComments: false
+NamespaceIndentation: All
