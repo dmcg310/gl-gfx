@@ -36,8 +36,13 @@ namespace MaterialSystem {
     void SetFloat(Material *material, const std::string &name, float value,
                   bool persistent = true);
 
+    float GetFloat(const Material *material, const std::string &name,
+                   float defaultValue = 0.0f);
+
     void SetInt(Material *material, const std::string &name, int value,
                 bool persistent = true);
+
+    int GetInt(const Material *material, const std::string &name, int defaultValue = 0);
 
     void SetVec2(Material *material, const std::string &name, const glm::vec2 &value,
                  bool persistent = true);

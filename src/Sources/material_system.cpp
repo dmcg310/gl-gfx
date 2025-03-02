@@ -39,9 +39,44 @@ namespace MaterialSystem {
         material->properties[name] = Property{Property::Type::Float, value, persistent};
     }
 
+    float GetFloat(const Material *material, const std::string &name,
+                   float defaultValue) {
+        if (!material || material->properties.find(name) == material->properties.end()) {
+            return defaultValue;
+        }
+
+        const Property &prop = material->properties.at(name);
+        if (prop.type != Property::Type::Float) {
+            return defaultValue;
+        }
+
+        try {
+            return std::any_cast<float>(prop.value);
+        } catch (const std::bad_any_cast &) {
+            return defaultValue;
+        }
+    }
+
     void SetInt(Material *material, const std::string &name, int value,
                 const bool persistent) {
         material->properties[name] = Property{Property::Type::Int, value, persistent};
+    }
+
+    int GetInt(const Material *material, const std::string &name, int defaultValue) {
+        if (!material || material->properties.find(name) == material->properties.end()) {
+            return defaultValue;
+        }
+
+        const Property &prop = material->properties.at(name);
+        if (prop.type != Property::Type::Int) {
+            return defaultValue;
+        }
+
+        try {
+            return std::any_cast<int>(prop.value);
+        } catch (const std::bad_any_cast &) {
+            return defaultValue;
+        }
     }
 
     void SetVec2(Material *material, const std::string &name, const glm::vec2 &value,

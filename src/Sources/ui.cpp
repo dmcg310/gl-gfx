@@ -7,15 +7,10 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "cursor_manager.h"
 #include "imgui.h"
-#include "resource_manager.h"
 #include "scene_system.h"
 #include "serialisation.h"
 
 namespace Ui {
-    static float ambientStrength = 0.1f;
-    static float diffuseStrength = 0.7f;
-    static float specularStrength = 0.5f;
-    static float shininess = 50.0f;
     static int selectedEntityIndex = -1;
     static bool firstTime = true;
     static ImVec2 windowPos(20, 20);
@@ -165,27 +160,69 @@ namespace Ui {
     static void RenderMaterialPropertiesSection() {
         if (ImGui::CollapsingHeader("Material Properties",
                                     ImGuiTreeNodeFlags_DefaultOpen)) {
-            bool updateMaterial = false;
+            const std::vector<SceneSystem::Entity *> &entities =
+                SceneSystem::GetAllEntities();
 
-            updateMaterial |=
-                ImGui::SliderFloat("Ambient Strength", &ambientStrength, 0.0f, 1.0f);
-            updateMaterial |=
-                ImGui::SliderFloat("Diffuse Strength", &diffuseStrength, 0.0f, 1.0f);
-            updateMaterial |=
-                ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f);
-            updateMaterial |= ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f);
+            if (selectedEntityIndex >= 0 &&
+                selectedEntityIndex < static_cast<int>(entities.size())) {
+                SceneSystem::Entity *entity = entities[selectedEntityIndex];
 
-            if (updateMaterial) {
-                if (MaterialSystem::Material *defaultMaterial =
-                        ResourceManager::GetDefaultMaterial()) {
-                    MaterialSystem::SetFloat(defaultMaterial, "ambientStrength",
-                                             ambientStrength);
-                    MaterialSystem::SetFloat(defaultMaterial, "diffuseStrength",
-                                             diffuseStrength);
-                    MaterialSystem::SetFloat(defaultMaterial, "specularStrength",
-                                             specularStrength);
-                    MaterialSystem::SetFloat(defaultMaterial, "shininess", shininess);
+                if (entity->material) {
+                    bool updateMaterial = false;
+
+                    float ambientStrength = MaterialSystem::GetFloat(
+                        entity->material, "ambientStrength", 0.1f);
+                    float diffuseStrength = MaterialSystem::GetFloat(
+                        entity->material, "diffuseStrength", 0.7f);
+                    float specularStrength = MaterialSystem::GetFloat(
+                        entity->material, "specularStrength", 0.5f);
+                    float shininess =
+                        MaterialSystem::GetFloat(entity->material, "shininess");
+
+                    updateMaterial |= ImGui::SliderFloat("Ambient Strength",
+                                                         &ambientStrength, 0.0f, 1.0f);
+                    updateMaterial |= ImGui::SliderFloat("Diffuse Strength",
+                                                         &diffuseStrength, 0.0f, 1.0f);
+                    updateMaterial |= ImGui::SliderFloat("Specular Strength",
+                                                         &specularStrength, 0.0f, 1.0f);
+                    updateMaterial |=
+                        ImGui::SliderFloat("Shininess", &shininess, 0.0f, 10.0f);
+
+                    int useTexture =
+                        MaterialSystem::GetInt(entity->material, "useTexture", 0);
+                    bool useTextureChecked = useTexture > 0;
+                    if (ImGui::Checkbox("Use Texture", &useTextureChecked)) {
+                        MaterialSystem::SetInt(entity->material, "useTexture",
+                                               useTextureChecked ? 1 : 0);
+                        updateMaterial = true;
+                    }
+
+                    int isEmissive =
+                        MaterialSystem::GetInt(entity->material, "isEmissive", 0);
+                    bool isEmissiveChecked = isEmissive > 0;
+                    if (ImGui::Checkbox("Is Emissive", &isEmissiveChecked)) {
+                        MaterialSystem::SetInt(entity->material, "isEmissive",
+                                               isEmissiveChecked ? 1 : 0);
+                        updateMaterial = true;
+                    }
+
+                    if (updateMaterial) {
+                        MaterialSystem::SetFloat(entity->material, "ambientStrength",
+                                                 ambientStrength);
+                        MaterialSystem::SetFloat(entity->material, "diffuseStrength",
+                                                 diffuseStrength);
+                        MaterialSystem::SetFloat(entity->material, "specularStrength",
+                                                 specularStrength);
+                        MaterialSystem::SetFloat(entity->material, "shininess",
+                                                 shininess);
+                    }
+                } else {
+                    ImGui::Text("Selected entity has no material.");
                 }
+            } else {
+                ImGui::Text(
+                    "No entity selected. Select an entity to edit its material "
+                    "properties.");
             }
         }
     }
