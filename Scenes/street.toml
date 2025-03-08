@@ -1,0 +1,664 @@
+scene_name = 'street'
+
+[camera]
+name = 'main'
+position = [ 0.0, 2.0, 10.0 ]
+up = [ 0.0, 1.0, 0.0 ]
+
+[[entity]]
+color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896, 1.0 ]
+name = 'street'
+
+    [entity.material]
+    name = 'street_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'plane'
+    path = '../Assets/Models/plane.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 0.0, 0.0, 0.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 40.0, 1.0, 30.0 ]
+
+[[entity]]
+color = [ 0.60000002384185791, 0.60000002384185791, 0.60000002384185791, 1.0 ]
+name = 'sidewalk_left'
+
+    [entity.material]
+    name = 'sidewalk_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.60000002384185791, 0.60000002384185791, 0.60000002384185791 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'plane'
+    path = '../Assets/Models/plane.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -10.0, 0.05000000074505806, 0.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 5.0, 1.0, 15.0 ]
+
+[[entity]]
+color = [ 0.60000002384185791, 0.60000002384185791, 0.60000002384185791, 1.0 ]
+name = 'sidewalk_right'
+
+    [entity.material]
+    name = 'sidewalk_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.60000002384185791, 0.60000002384185791, 0.60000002384185791 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'plane'
+    path = '../Assets/Models/plane.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 10.0, 0.05000000074505806, 0.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 5.0, 1.0, 15.0 ]
+
+[[entity]]
+color = [ 1.0, 1.0, 1.0, 1.0 ]
+name = 'lamp_post_1'
+
+    [entity.material]
+    name = 'lamp_post_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 1
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 1.5, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.20000000298023224, 3.0, 0.20000000298023224 ]
+
+[[entity]]
+color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896, 1.0 ]
+name = 'lamp_fixture_1'
+
+    [entity.material]
+    name = 'lamp_fixture_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 3.2000000476837158, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.5, 0.20000000298023224, 0.5 ]
+
+[[entity]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104, 1.0 ]
+name = 'lamp_bulb_1'
+
+    [entity.material]
+    name = 'lamp_bulb_material_1'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 1
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 2.9000000953674316, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+
+[[entity]]
+color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ]
+name = 'lamp_post_2'
+
+    [entity.material]
+    name = 'lamp_post_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 1.5, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.20000000298023224, 3.0, 0.20000000298023224 ]
+
+[[entity]]
+color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896, 1.0 ]
+name = 'lamp_fixture_2'
+
+    [entity.material]
+    name = 'lamp_fixture_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 3.2000000476837158, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.5, 0.20000000298023224, 0.5 ]
+
+[[entity]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104, 1.0 ]
+name = 'lamp_bulb_2'
+
+    [entity.material]
+    name = 'lamp_bulb_material_2'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 1
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -7.0, 2.9000000953674316, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+
+[[entity]]
+color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ]
+name = 'lamp_post_3'
+
+    [entity.material]
+    name = 'lamp_post_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 1.5, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.20000000298023224, 3.0, 0.20000000298023224 ]
+
+[[entity]]
+color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896, 1.0 ]
+name = 'lamp_fixture_3'
+
+    [entity.material]
+    name = 'lamp_fixture_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 3.2000000476837158, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.5, 0.20000000298023224, 0.5 ]
+
+[[entity]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104, 1.0 ]
+name = 'lamp_bulb_3'
+
+    [entity.material]
+    name = 'lamp_bulb_material_3'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 1
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 2.9000000953674316, -5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+
+[[entity]]
+color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224, 1.0 ]
+name = 'lamp_post_4'
+
+    [entity.material]
+    name = 'lamp_post_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.20000000298023224, 0.20000000298023224, 0.20000000298023224 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 1.5, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.20000000298023224, 3.0, 0.20000000298023224 ]
+
+[[entity]]
+color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896, 1.0 ]
+name = 'lamp_fixture_4'
+
+    [entity.material]
+    name = 'lamp_fixture_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 3.2000000476837158, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.5, 0.20000000298023224, 0.5 ]
+
+[[entity]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104, 1.0 ]
+name = 'lamp_bulb_4'
+
+    [entity.material]
+    name = 'lamp_bulb_material_4'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 1
+        shininess = 32.0
+        specularStrength = 0.5
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 7.0, 2.9000000953674316, 5.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.30000001192092896, 0.30000001192092896, 0.30000001192092896 ]
+
+[[entity]]
+color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896, 1.0 ]
+name = 'building_wall_back'
+
+    [entity.material]
+    name = 'building_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 0.0, 4.0, -8.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 40.0, 8.0, 1.0 ]
+
+[[entity]]
+color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896, 1.0 ]
+name = 'building_wall_left'
+
+    [entity.material]
+    name = 'building_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ -12.600000381469727, 4.0, 0.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 1.0, 8.0, 30.0 ]
+
+[[entity]]
+color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896, 1.0 ]
+name = 'building_wall_right'
+
+    [entity.material]
+    name = 'building_material'
+
+        [entity.material.properties]
+        ambientColor = [ 0.05000000074505806, 0.05000000074505806, 0.05000000074505806 ]
+        ambientStrength = 0.05000000074505806
+        color = [ 0.40000000596046448, 0.34999999403953552, 0.30000001192092896 ]
+        diffuseStrength = 0.80000001192092896
+        isEmissive = 0
+        shininess = 5.0
+        specularStrength = 0.10000000149011612
+        useTexture = 0
+
+        [entity.material.shader]
+        fragment_path = '../src/Shaders/default.frag'
+        name = 'default'
+        vertex_path = '../src/Shaders/default.vert'
+
+    [entity.mesh]
+    name = 'cube'
+    path = '../Assets/Models/cube.obj'
+
+    [entity.texture]
+    name = 'default'
+    path = '../Assets/Textures/default.png'
+
+    [entity.transform]
+    position = [ 12.600000381469727, 4.0, 0.0 ]
+    rotation = [ 0.0, 0.0, 0.0 ]
+    scale = [ 0.89999997615814209, 8.0, 30.0 ]
+
+[[light]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+intensity = 2.0
+name = 'lamp_light_1'
+position = [ -7.0, 2.9000000953674316, -5.0 ]
+type = 'point'
+
+[[light]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+intensity = 2.0
+name = 'lamp_light_2'
+position = [ -7.0, 2.9000000953674316, 5.0 ]
+type = 'point'
+
+[[light]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+intensity = 2.0
+name = 'lamp_light_3'
+position = [ 7.0, 2.9000000953674316, -5.0 ]
+type = 'point'
+
+[[light]]
+color = [ 1.0, 0.89999997615814209, 0.69999998807907104 ]
+intensity = 2.0
+name = 'lamp_light_4'
+position = [ 7.0, 2.9000000953674316, 5.0 ]
+type = 'point'
