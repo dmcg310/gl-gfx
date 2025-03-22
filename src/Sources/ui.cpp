@@ -475,7 +475,11 @@ namespace Ui {
         ImGui::StyleColorsDark();
 
         ImGui_ImplGlfw_InitForOpenGL(Backend::GetWindowHandle(), true);
+#ifdef __APPLE__
+        ImGui_ImplOpenGL3_Init("#version 410");
+#else
         ImGui_ImplOpenGL3_Init("#version 460");
+#endif
     }
 
     void BeginFrame() {

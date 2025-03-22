@@ -39,8 +39,13 @@ namespace Backend {
                       << "\n";
         });
 
+#ifdef __APPLE__
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+#else
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+#endif
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
@@ -65,6 +70,7 @@ namespace Backend {
         if (m_window == NULL) {
             ErrorHandler::ThrowError("Failed to create GLFW window", __FILE__, __func__,
                                      __LINE__);
+            return;
         }
 
         glfwSetFramebufferSizeCallback(m_window, framebuffer_resize_callback);
@@ -76,6 +82,7 @@ namespace Backend {
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             ErrorHandler::ThrowError("Failed to initialise GLAD", __FILE__, __func__,
                                      __LINE__);
+            return;
         }
 
         glEnable(GL_DEPTH_TEST);

@@ -15,7 +15,7 @@ namespace App {
         SceneSystem::Init();
         LightSystem::Init();
 
-        Serialisation::Deserialise("street");
+        Serialisation::Deserialise("demo");
 
         float lastTime = Backend::GetWindowTime();
         float deltaTime = 0.0f;
