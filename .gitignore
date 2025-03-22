@@ -4,6 +4,7 @@ imgui.ini
 [Bb]uild/
 [Bb]uild-debug/
 [Bb]uild-rel/
+[Bb]uild-release/
 
 compile_commands.json
 
