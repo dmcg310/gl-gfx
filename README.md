@@ -20,9 +20,9 @@ The project uses CMake with presets for easier build configuration.
 
 ### Prerequisites
 
-CMake 3.19 or newer
-C++20 compatible compiler
-Git
+- CMake 3.19 or newer
+- C++20 compatible compiler
+- Git
 
 ### Setup
 Clone the repository and initialize submodules:
@@ -33,38 +33,56 @@ cd gl-gfx
 git submodule update --init --recursive
 ```
 
-### Building with CMake Presets
-Debug Build (with UI debug features)
+#### Building with CMake Presets
 
 #### Configure debug build
+
 ```sh
 cmake --preset=debug
 ```
 
 #### Build with parallel jobs
+
+```sh
 cmake --build --preset=debug -j
-Release Build (without debug UI)
-bashCopy# Configure release build
+```
+
+#### Configure release build
+
+```sh
 cmake --preset=release
+```
 
-# Build with parallel jobs
+#### Build with parallel jobs
+
+```sh
 cmake --build --preset=release -j
+```
 
-Running the Application
+#### Running the Application
+
 After building, run the application:
-bashCopy# Debug build
+
+#### Debug build
+
+```sh
 ./build-debug/gl-gfx/gl-gfx
+```
 
-# Release build
+#### Release build
+
+```sh
 ./build-release/gl-gfx/gl-gfx
-Debug vs Release Modes
+```
 
-Debug Mode: Includes ImGui panels for entity manipulation, scene editing, and performance metrics
-Release Mode: UI debug panels are disabled for better performance in deployed applications
+#### Debug vs Release Modes
 
-Toggle between camera and UI modes with Tab key.
+- Debug Mode: Includes ImGui panels for entity manipulation, scene editing, and performance metrics
+- Release Mode: UI panels are disabled for better performance in deployed applications
 
-### References
+Note: In a debug build toggle between camera and UI modes with `tab` key.
+
+## References
 
 - [Glitter](https://github.com/Polytonic/Glitter)
 - [Assimp](https://github.com/assimp/assimp)
