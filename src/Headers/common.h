@@ -9,3 +9,5 @@
 
 #include "types.h"
 #include "enums.h"
+
+extern bool g_EnableDebugFeatures;

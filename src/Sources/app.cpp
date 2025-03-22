@@ -34,10 +34,15 @@ namespace App {
             Backend::Update();
             SceneSystem::Update();
 
-            Backend::PrepareUi();
+            if (g_EnableDebugFeatures) {
+                Backend::PrepareUi();
+            }
 
             RenderSystem::Render(deltaTime);
-            Backend::RenderUi();
+
+            if (g_EnableDebugFeatures) {
+                Backend::RenderUi();
+            }
 
             Backend::EndFrame();
         }

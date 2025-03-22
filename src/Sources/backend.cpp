@@ -88,7 +88,10 @@ namespace Backend {
         glEnable(GL_DEPTH_TEST);
 
         Input::Init();
-        Ui::Init();
+
+        if (g_EnableDebugFeatures) {
+            Ui::Init();
+        }
     }
 
     void BeginFrame() {
@@ -112,10 +115,12 @@ namespace Backend {
     }
 
     void EndFrame() {
-        Ui::EndFrame();
+        if (g_EnableDebugFeatures) {
+            Ui::EndFrame();
 
-        if (CursorManager::IsCursorModeLocked()) {
-            CursorManager::UnlockCursorMode();
+            if (CursorManager::IsCursorModeLocked()) {
+                CursorManager::UnlockCursorMode();
+            }
         }
 
         glfwSwapBuffers(m_window);
@@ -126,7 +131,9 @@ namespace Backend {
             ToggleFullscreen();
         }
 
-        Ui::CleanUp();
+        if (g_EnableDebugFeatures) {
+            Ui::CleanUp();
+        }
 
         glfwTerminate();
     }

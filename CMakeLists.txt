@@ -5,6 +5,13 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build (Debug/Release)" FORCE)
 endif ()
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DGL_GFX_DEBUG_FEATURES_ENABLED)
+    message(STATUS "Debug features enabled (Debug build)")
+else()
+    message(STATUS "Debug features disabled (Release build)")
+endif()
+
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
