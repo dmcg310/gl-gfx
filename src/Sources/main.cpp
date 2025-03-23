@@ -1,7 +1,9 @@
-#include "app.h"
+#include "api.h"
 
 int main() {
-    App::Run();
+    Api::Init();
+    Api::LoadScene("demo");
+    Api::Run();
 
     return 0;
 }

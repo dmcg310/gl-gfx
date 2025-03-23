@@ -1,4 +1,4 @@
-#include "app.h"
+#include "api.h"
 
 #include "backend.h"
 #include "light_system.h"
@@ -7,22 +7,25 @@
 #include "scene_system.h"
 #include "serialisation.h"
 
-namespace App {
-    void Run() {
+namespace Api {
+    static bool m_isRunning;
+
+    void Init() {
         Backend::Init();
         ResourceManager::Init();
         RenderSystem::Init();
         SceneSystem::Init();
         LightSystem::Init();
+    }
 
-        Serialisation::Deserialise("demo");
+    void Run() {
+        m_isRunning = true;
 
         float lastTime = Backend::GetWindowTime();
-        float deltaTime = 0.0f;
 
-        while (Backend::WindowIsOpen()) {
+        while (m_isRunning && Backend::WindowIsOpen()) {
             const float currentTime = Backend::GetWindowTime();
-            deltaTime = currentTime - lastTime;
+            float deltaTime = currentTime - lastTime;
             lastTime = currentTime;
 
             if (Backend::WindowIsMinimized()) {
@@ -52,5 +55,26 @@ namespace App {
         ResourceManager::CleanUp();
         LightSystem::CleanUp();
         Backend::CleanUp();
+    }
+
+    void Stop() {
+        m_isRunning = false;
+    }
+
+    bool LoadScene(const std::string& path) {
+        return Serialisation::Deserialise(path);
+    }
+
+    SceneSystem::Entity* CreateEntity(const std::string& name, const glm::vec4& color) {
+        return SceneSystem::CreateEntity(name, color);
+    }
+
+    float GetDeltaTime() {
+        static float lastTime = Backend::GetWindowTime();
+        float currentTime = Backend::GetWindowTime();
+        float deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        return deltaTime;
     }
 }
