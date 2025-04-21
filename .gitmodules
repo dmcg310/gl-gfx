@@ -18,10 +18,6 @@
 	path = src/Vendor/stb
 	url = https://github.com/nothings/stb.git
 	branch = master
-[submodule "src/Vendor/bullet"]
-	path = src/Vendor/bullet
-	url = https://github.com/bulletphysics/bullet3.git
-	branch = master
 [submodule "src/Vendor/imgui"]
 	path = src/Vendor/imgui
 	url = https://github.com/ocornut/imgui.git

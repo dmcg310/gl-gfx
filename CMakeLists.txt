@@ -22,13 +22,6 @@ option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
 add_subdirectory(src/Vendor/assimp)
 
-option(BUILD_BULLET2_DEMOS OFF)
-option(BUILD_CPU_DEMOS OFF)
-option(BUILD_EXTRAS OFF)
-option(BUILD_OPENGL3_DEMOS OFF)
-option(BUILD_UNIT_TESTS OFF)
-add_subdirectory(src/Vendor/bullet)
-
 if (MSVC)
     add_compile_options(/MP)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /permissive- /std:c++20")
@@ -57,7 +50,6 @@ set(IMGUI_SOURCES
 
 include_directories(src/Headers/
         src/Vendor/assimp/include/
-        src/Vendor/bullet/src/
         src/Vendor/glad/include/
         src/Vendor/glfw/include/
         src/Vendor/glm/
@@ -102,9 +94,6 @@ target_link_libraries(${PROJECT_NAME}
         glfw
         ${GLFW_LIBRARIES}
         ${GLAD_LIBRARIES}
-        BulletDynamics
-        BulletCollision
-        LinearMath
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
